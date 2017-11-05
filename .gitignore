@@ -102,3 +102,6 @@ ENV/
 
 # Compiled Files
 *.pyc
+
+# macOS Specific Ignores
+.DS_Store
