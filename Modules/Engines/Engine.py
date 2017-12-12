@@ -1,10 +1,10 @@
 import sys
 
-sys.path.append('../../Modules/Cards/')
-sys.path.append('../../Modules/Players/')
+sys.path.append('../')
 
-from Deck import Deck
-from Card import Card
+from Cards.Deck import Deck
+from Cards.Card import Card
+from Players.GoFish.HumanPlayer import HumanPlayer
 
 class Engine(object):
 	# Controls the start, turn, and checks of the actual game.
@@ -94,7 +94,6 @@ class Engine(object):
 
 # All Engines, at end game, will congratulate players
 	def congratulations(self, playerObj):
-		from HumanPlayer import HumanPlayer
 
 		winning_players = ""
 		winning_trick_amount = None

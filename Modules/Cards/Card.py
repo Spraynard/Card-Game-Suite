@@ -1,14 +1,21 @@
-def cardRankToNum(rank):
-	if rank == "Ace":
-		return 14
-	elif rank == "King":
-		return 13
-	elif rank == "Queen":
-		return 12
-	elif rank == "Jack":
-		return 11
-	else:
-		return int(rank)
+def cardRankToNum(rank, variant = None):
+	if not variant:
+		if rank == "Ace":
+			return 14
+		elif rank == "King":
+			return 13
+		elif rank == "Queen":
+			return 12
+		elif rank == "Jack":
+			return 11
+		else:
+			return int(rank)
+	elif variant == "blackjack":
+		if (rank == "Jack" or rank == "Queen" or rank == "King"):
+			return 10
+		else:
+			return int(rank)
+
 
 def cardSuitRank(suit):
 	if suit == "Diamonds":
@@ -26,15 +33,18 @@ class Card(object):
 		
 	"""
 
-	def __init__(self, rank = None, suit = None):
+	def __init__(self, rank = None, suit = None, variant = None):
 		self.rank = str(rank)
 		self.suit = suit
+		self.variant = variant
 		self.acceptDict = {
 			'suits' : ["Clubs", "Spades", "Diamonds", "Hearts"],
 			'ranks' : ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
 		}
 
 	def __eq__(self, other):
+		if not self or not other:
+			return None
 		return (self.rank == other.rank) and (self.suit == other.suit)
 
 	def isSameRank(self, other):
@@ -55,6 +65,9 @@ class Card(object):
 
 	def __str__(self):
 		return self.rank + " of " + self.suit
+
+	def cardSuitToNum(suit):
+		pass
 
 	def getAcceptDict(self):
 		return self.acceptDict

@@ -17,16 +17,13 @@ from time import sleep as sleep
 
 import sys
 
-sys.path.append('../../../Modules/')
-sys.path.append('../../../Modules/Cards/')
-sys.path.append('../../../Modules/Players/')
-sys.path.append('../../../Modules/Engines/')
-sys.path.append('../../../Modules/Engines/GoFish/')
+sys.path.append('../../')
 
-from Card import Card
-from HumanPlayer import HumanPlayer
-from Bot import Bot
-from GoFishEngine import GoFishEngine
+from Cards.Card import Card
+
+from Players.GoFish.HumanPlayer import HumanPlayer
+from Players.GoFish.Bot import Bot
+from Engines.GoFish.GoFishEngine import GoFishEngine
 
 class GoFishStarter:
 	def __init__(self, test = False):

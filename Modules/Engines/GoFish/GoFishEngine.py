@@ -1,12 +1,12 @@
 import sys
 
-sys.path.append('../')
-sys.path.append('../../Cards')
-sys.path.append('../../Players')
+sys.path.append('../../')
 
-from Engine import Engine
-from HumanPlayer import HumanPlayer
-from Bot import Bot
+from ..Engine import Engine
+
+from Players.GoFish.HumanPlayer import HumanPlayer
+from Players.GoFish.Bot import Bot
+from Cards.Card import Card
 
 class GoFishEngine(Engine):
 	def __init__(self):
@@ -71,8 +71,6 @@ class GoFishEngine(Engine):
 	def chooseCard(self, player):
 		# Summary: Instructs players to choose a rank of card that they also have in their hand to eventually ask another player
 		# 	that is chosen.
-		from Card import Card
-
 		if isinstance(player, Bot):
 			# Implement Bot Card Choosing. Game will not work without this. What I eventually want to to is
 				#  1. Bot looks through hand for cards they have
@@ -139,6 +137,8 @@ class GoFishEngine(Engine):
 			else:
 				chosenPlayer.talk('victory')
 
+		return chosenCard
+
 	# End Game Action Functionality
 
 	# Player Handling Functionality
@@ -159,7 +159,7 @@ class GoFishEngine(Engine):
 			fourOrLess = False
 
 		for p in players:
-			p.drawHand(deck, fourOrLess)
+			p.drawHand(deck, goFish = fourOrLess)
 	# Phases Coded Here
 
 	# Game Phases Here
@@ -173,16 +173,21 @@ class GoFishEngine(Engine):
 		return None
 
 	def tradingPhase(self, player):		
-		self.askForCardRank(player)
+		chosenCard = self.askForCardRank(player)
 		# Player state is valuable after they ask for card.
 		deck = self.getDeck()
 
 		if not player.gotGuess():
-			if (player.countHand() == 0) and (deck.currentAmount() == 0):
+			if (player.handCount() == 0) and (deck.currentAmount() == 0):
 				print "Hey everyone, laugh at %s! They got kicked out of the game for losing!" % player
 				self.removePlayer(player)
 			else:
-				player.drawCard(deck)
+				drawnCard = deck.draw()
+				player.drawCard(drawnCard)
+
+				if ( drawnCard == chosenCard ):
+					self.takeTurn()
+
 
 		player.resetChosenVariables()
 
@@ -203,6 +208,7 @@ class GoFishEngine(Engine):
 
 			# Resetting the player's guess for next turn :)
 			player.resetGuess()
+			self.takeTurn()
 		else:
 			# If the player had to draw from the pile because they guessed badly.
 			self._addPlayerIndex()

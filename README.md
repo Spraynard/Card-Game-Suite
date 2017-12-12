@@ -1,6 +1,6 @@
 # Card Game Suite
 
-Do you feel lonely? Don't have anyone to play sweet cards games like Blackjack, Poker, or GoFish with? Well, you're in luck, because with the Card Game Suite, 
+Do you feel lonely? Don't have anyone to play sweet cards games like Blackjack, Poker, or GoFish with? Well, you're in luck, because with the Card Game Suite, you'll have the company of card playing bots, and even real life friends, to play a nice little game with. 
 
 
 ## Status

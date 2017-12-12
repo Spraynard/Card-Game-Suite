@@ -1,32 +1,30 @@
 import sys
 import time
 
-sys.path.append('../Cards/')
+sys.path.append('../../')
 
 from HumanPlayer import HumanPlayer
+from Cards.Card import Card
 
 class Bot(HumanPlayer):
 	"""Bot object, which is a player. There are taunts available to bots to rouse up the player whenver they make a mistake"""
 	def __init__(self, name = None):
-		super(Bot, self).__init__()
+		super(Bot, self).__init__(name)
+		
+		# These are needed for bot specific functionality
 		self.taunts = ["You're going to have to try harder than that!\"" ,
 						"I thought that I was playing a real person, not a bot!\"" ,
 						"What the heck are you doing?\"" ,
 						"Dang, I didn't know I was playing a baby tonight\"" ]
 		
 		self.rejections = ["%s: \"No", "%s: \"Nope", "%s: \"I sure do not", "%s: \"Hahaha, no", "%s: \"You wish!"]
-		
 		self.chooseDict = {}
-		self.name = name
 
 	def __repr__(self):
 		return "Bot #: %s" % self.id
 
 	def __str__(self):
 		return "Bot - %s" % self.name
-
-	def __eq__(self, other):
-		return self.id == other.id
 
 	def randomName(self):
 		from faker import Faker
@@ -46,7 +44,6 @@ class Bot(HumanPlayer):
 	def _analyzeChooseDict(self):
 		# Haha, this is laughably bad AI for the bots.
 		#	Might as well have a random card generator for now
-		from Card import Card
 		maxCount = None
 		rankMax = None
 		cD = self._getChooseDict()
@@ -66,7 +63,6 @@ class Bot(HumanPlayer):
 		hand = self.getHand()
 
 		if len(hand) == 0:
-			from Card import Card
 			chooseableCards = Card().acceptDict['ranks']
 			self.setChosenCard(Card(random.choice(chooseableCards)))
 		else:

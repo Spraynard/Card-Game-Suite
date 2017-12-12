@@ -1,14 +1,14 @@
+import sys
 import random
 
-class HumanPlayer(object):
+from ..Player import Player
+
+class HumanPlayer(Player):
 	"""Player object, All the commands that the player will use in the game are here."""
 	def __init__(self, name = None):		
-		import uuid
-
-		self.hand = []
-		self.name = name
+		super(HumanPlayer, self).__init__()
+		
 		self.tricks = 0
-
 		# Internal Player's Responses to questions posed by engine
 		self.guess = None
 		self.chosenPlayer = None
@@ -19,33 +19,9 @@ class HumanPlayer(object):
 		self.sortingDict = {}
 		self.trickHolder = []
 
-		# Internal Player's ID
-		self.id = uuid.uuid4()
-
-	def __eq__(self, other):
-		return self.id == other.id
-
-	def __repr__(self):
-		return str(self.name) or "Player"
-
-	def __str__(self):
-		if not self.name:
-			return "'%s'" % self.name
-		else:
-			return "'HumanPlayer'"
-
-	def randomName(self):
-		from faker import Faker
-		fake = Faker()
-		return HumanPlayer(fake.name())		
-	
-
 	# |-------------Talking (Printed Statements)-----------------------------|
 	# These statements will be used during the trading phase. Something to look at to
 	# 	expand, definitely.
-
-	def getName(self):
-		return self.name
 
 	def victoryStatement(self):
 		statementDict = {
@@ -186,44 +162,6 @@ class HumanPlayer(object):
 
 	# End Trick Functionality
 
-	# Player Hand Functionality
-	def getHand(self):
-		return self.hand
-
-	def setHand(self, hand):
-		self.hand = hand
-
-	def hasHand(self):
-		if (self.hand):
-			return True
-		return False
-
-	def showHand(self):
-		return self.getHand()
-
-	def displayHand(self):
-		print self.showHand()
-
-	def countHand(self):
-		return len(self.getHand())
-
-	def drawCard(self, deck):
-		# Summary: Draws a single card from the deck and then adds it to the player's hand
-		# Input: `Deck` - The deck being used by the players. 
-		# Return: Void if everything goes alright. False if shit is messed up
-		if deck.currentAmount() == 0:
-			return
-		self.takeCard(deck.draw())
-
-	def drawHand(self, deck, small_player_amt):
-		if not type(small_player_amt) == bool:
-			raise Exception("Hey you need to indicate with a boolean whether there are four or more players.")
-		initHandSize = 5
-		if small_player_amt:
-			initHandSize = 7
-		for i in range(initHandSize):
-			self.drawCard(deck)
-
 	# NEEDS ATTENTION - OCTOBER 17th, 2017
 	def getSortingDict(self):
 		return self.sortingDict
@@ -234,7 +172,7 @@ class HumanPlayer(object):
 	def populateSortingDict(self):
 		sortingDict = self.getSortingDict()
 		hand = self.getHand()
-		if self.countHand == 0:
+		if self.handCount() == 0:
 			return
 		for c in self.getHand():
 			cardRank = c.getRank()
@@ -257,17 +195,6 @@ class HumanPlayer(object):
 		self.formatCardsBySortingDict()
 
 	# End Player Hand Functionality
-
-	#|---------Drawing or Taking Cards Functionality--------|
-
-	def takeCard(self, card):
-		self.hand.append(card)
-
-	def takeRelevantCards(self, cardArray):
-		for c in cardArray:
-			self.takeCard(c)
-
-	# |--------End Drawing or Taking Cards Functionality-----|
 
 	# Code for player specific TRADING PHASE operations
 	def hasCard(self, flagCard):
