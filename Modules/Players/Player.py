@@ -4,7 +4,7 @@ import sys
 
 sys.path.append('../')
 
-from Debug.TermColor import *
+from Modules.Debug.TermColor import *
 
 class Player(object):
 
@@ -83,7 +83,6 @@ class Player(object):
 		# Summary: Draws a single card from the deck and then adds it to the player's hand
 		# Input: `Deck` - The deck being used by the players. 
 		# Return: Void if everything goes alright. False if shit is messed up		
-		printGreenBG("This is the card that I'm taking %s" % card)
 		if not card:
 			return
 		self.takeCard(card)
@@ -116,7 +115,6 @@ class Player(object):
 				# 3 or less players
 				handSize = 7
 
-			print "The hand size is: %s" % handSize
 		for i in range(handSize):
 			drawnCard = deck.draw()
 			self.drawCard(drawnCard)
@@ -125,7 +123,9 @@ class Player(object):
 		self.hand = []
 
 
-
+ 	##########################
+ 	# Go Fish specific methods
+ 	##########################
 
 
 

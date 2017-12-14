@@ -14,8 +14,13 @@ class TestGoFishEngine(GoFishEngine):
 		hand = []
 		for i in range(7):
 			hand.append(deck_copy.pop())
-		return hand
-
+		handString = '';
+		for i in range(len(hand)):
+			if i < len(hand) - 1:
+				handString += str(hand[i]) + ' '
+			else:
+				handString += str(hand[i])
+		return handString
 	# def playerAskLoop(self, choiceListLength):
 	# 	print "This is the test ask loop"
 	# 	print "This is the choice list length: %s" % choiceListLength

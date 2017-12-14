@@ -22,6 +22,13 @@ class HumanPlayer(Player):
 	# |-------------Talking (Printed Statements)-----------------------------|
 	# These statements will be used during the trading phase. Something to look at to
 	# 	expand, definitely.
+	def randomName(self):
+		# Returns a `Player` with a random name from the Faker lib
+		#	can get some pretty funny names :)
+		from faker import Faker
+		fake = Faker()
+		
+		return HumanPlayer(fake.name())
 
 	def victoryStatement(self):
 		statementDict = {
@@ -108,7 +115,6 @@ class HumanPlayer(Player):
 		self.tricks += 1
 
 	def addTotalTrick(self, trickRef):
-		print "Trick ref should go up!"
 		trickRef += 1
 
 	def getTricks(self):

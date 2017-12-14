@@ -1,14 +1,12 @@
 import sys
 import unittest
 
-sys.path.append('../../../Modules/Players/')
-sys.path.append('../../../Modules/Engines/')
-sys.path.append('../../../Modules/Cards/')
+sys.path.append('../../../')
 
-from Bot import Bot
-from HumanPlayer import HumanPlayer
-from GoFishCard import GoFishCard as Card
-from GoFish.TestGoFishEngine import TestGoFishEngine
+from Modules.Players.GoFish.Bot import Bot
+from Modules.Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Cards.Card import Card
+from Modules.Engines.GoFish.TestGoFishEngine import TestGoFishEngine
 
 class InitialPhaseEngineTests(unittest.TestCase):
 	
@@ -49,6 +47,7 @@ class InitialPhaseEngineTests(unittest.TestCase):
 
 		# Splitting the output is a nice parse to apply to
 		# 	variables
+		print output
 		givenTrickOutput = output.split('\n')[0]
 		givenHandOutput = output.split('\n')[1]
 
@@ -58,6 +57,7 @@ class InitialPhaseEngineTests(unittest.TestCase):
 	def test_initial_phase_multiple_tricks(self):
 		# Player is going to start out with 2 tricks on this initial phase test
 		for i in range(2):
+			# Add a trick to a hand.
 			self.humanPlayer.addPlayerTrick()
 
 		self.engine.setPlayers([self.humanPlayer])

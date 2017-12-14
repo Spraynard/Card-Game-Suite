@@ -4,9 +4,9 @@ sys.path.append('../../')
 
 from ..Engine import Engine
 
-from Players.GoFish.HumanPlayer import HumanPlayer
-from Players.GoFish.Bot import Bot
-from Cards.Card import Card
+from Modules.Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Players.GoFish.Bot import Bot
+from Modules.Cards.Card import Card
 
 class GoFishEngine(Engine):
 	def __init__(self):
@@ -24,7 +24,7 @@ class GoFishEngine(Engine):
 
 	def displayHand(self, player):
 		# Prints out the player's hand that is returned from a HumanPlayer's class method
-		print player.showHand()
+		player.showHand()
 
 	def displayCurrentPlayerInfo(self, player):
 		# Give
@@ -33,7 +33,7 @@ class GoFishEngine(Engine):
 			# 	the player is a bot
 			return
 		player.displayTricks()
-		player.displayHand()
+		self.displayHand(player)
 
 	def playerAskLoop(self, choiceListLength):
 		# Based on the length of the choiceList.
@@ -165,7 +165,6 @@ class GoFishEngine(Engine):
 	# Game Phases Here
 	def initialPhase(self, player):
 		self.displayCurrentPlayerInfo(player)
-		return None
 
 	def decisionPhase(self, player):
 		self.choosePlayerToAsk(player)

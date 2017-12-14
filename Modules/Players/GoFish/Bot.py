@@ -1,10 +1,10 @@
 import sys
 import time
 
-sys.path.append('../../')
+sys.path.append('../../../')
 
-from HumanPlayer import HumanPlayer
-from Cards.Card import Card
+from Modules.Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Cards.Card import Card
 
 class Bot(HumanPlayer):
 	"""Bot object, which is a player. There are taunts available to bots to rouse up the player whenver they make a mistake"""

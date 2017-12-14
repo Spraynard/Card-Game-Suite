@@ -1,10 +1,10 @@
 import sys
 
-sys.path.append('../')
+sys.path.append('../../')
 
-from Cards.Deck import Deck
-from Cards.Card import Card
-from Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Cards.Deck import Deck
+from Modules.Cards.Card import Card
+from Modules.Players.GoFish.HumanPlayer import HumanPlayer
 
 class Engine(object):
 	# Controls the start, turn, and checks of the actual game.
