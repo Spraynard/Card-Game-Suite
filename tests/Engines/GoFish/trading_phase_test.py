@@ -1,14 +1,12 @@
 import sys
 import unittest
 
-sys.path.append('../../../Modules/Players/')
-sys.path.append('../../../Modules/Engines/')
-sys.path.append('../../../Modules/Cards/')
+sys.path.append('../../../')
 
-from Bot import Bot
-from HumanPlayer import HumanPlayer
-from Card import Card
-from GoFish.TestGoFishEngine import TestGoFishEngine
+from Modules.Players.GoFish.Bot import Bot
+from Modules.Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Cards.Card import Card
+from Modules.Engines.GoFish.TestGoFishEngine import TestGoFishEngine
 
 # Lets ask what the trading phase should do?:
 # 	1. Based on the player and card selected from the decision phase, you should
@@ -84,9 +82,9 @@ class TradingPhaseEngineTests(unittest.TestCase):
 												Chosen Card: %s" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank()))
 		
 		self.assertTrue(len(self.botPlayer.getGiveArray()) == 0, "Bot Player's Give Array: %s" % self.botPlayer.getGiveArray())
-		self.assertTrue(self.botPlayer.countHand() == 0, "Bot Player's Hand %s" % self.botPlayer.showHand())
+		self.assertTrue(self.botPlayer.handCount() == 0, "Bot Player's Hand %s" % self.botPlayer.showHand())
 		
-		self.assertFalse(self.humanPlayer.countHand() == 0, "Human Player's hand is not empty, as it should be")
+		self.assertFalse(self.humanPlayer.handCount() == 0, "Human Player's hand is not empty, as it should be")
 
 	def test_trading_phase_reject_no_cards(self):
 		# Player should draw a card from the deck after this.
@@ -100,7 +98,7 @@ class TradingPhaseEngineTests(unittest.TestCase):
 		self.humanPlayer.setChosenPlayer(self.botPlayer)
 		self.humanPlayer.setChosenCard(ask_card)
 
-		self.assertTrue(self.humanPlayer.countHand() == 0)
+		self.assertTrue(self.humanPlayer.handCount() == 0)
 
 		self.engine.tradingPhase(self.humanPlayer)
 
@@ -115,11 +113,11 @@ class TradingPhaseEngineTests(unittest.TestCase):
 												Chosen Player: %s\n\
 												Chosen Card: %s" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank()))
 
-		self.assertTrue(self.humanPlayer.countHand() == 1)
-		self.assertTrue(self.botPlayer.countHand() == 3)
+		self.assertTrue(self.humanPlayer.handCount() == 1)
+		self.assertTrue(self.botPlayer.handCount() == 3)
 
 	def test_trading_phase_reject_player_loss(self):
-		from Deck import Deck
+		from Modules.Cards.Deck import Deck
 
 		self.engine.deck = Deck()
 		self.engine.setPlayers([self.humanPlayer, self.botPlayer])
@@ -136,7 +134,7 @@ class TradingPhaseEngineTests(unittest.TestCase):
 
 		self.humanPlayer.setChosenCard(ask_card)
 
-		self.assertTrue(self.humanPlayer.countHand() == 0)
+		self.assertTrue(self.humanPlayer.handCount() == 0)
 
 		self.engine.tradingPhase(self.humanPlayer)
 

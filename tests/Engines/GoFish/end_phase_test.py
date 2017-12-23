@@ -1,14 +1,12 @@
 import sys
 import unittest
 
-sys.path.append('../../../Modules/Players/')
-sys.path.append('../../../Modules/Engines/')
-sys.path.append('../../../Modules/Cards/')
+sys.path.append('../../../')
 
-from Bot import Bot
-from HumanPlayer import HumanPlayer
-from Card import Card
-from GoFish.TestGoFishEngine import TestGoFishEngine
+from Modules.Players.GoFish.Bot import Bot
+from Modules.Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Cards.Card import Card
+from Modules.Engines.GoFish.TestGoFishEngine import TestGoFishEngine
 
 # Question: How can I test the end phase?
 # 
@@ -66,14 +64,14 @@ class EndPhaseEngineTests(unittest.TestCase):
 		]
 
 		self.humanPlayer.takeRelevantCards(hand)
-		self.assertTrue(self.humanPlayer.countHand() == 4)
+		self.assertTrue(self.humanPlayer.handCount() == 4)
 		self.humanPlayer.setGuess(True)
 		self.assertTrue(self.humanPlayer.gotGuess() == True)
 
 		self.engine.endPhase(self.humanPlayer)
 
 		self.assertTrue(self.humanPlayer.gotGuess() == False)
-		self.assertTrue(self.humanPlayer.countHand() == 0)
+		self.assertTrue(self.humanPlayer.handCount() == 0)
 		self.assertTrue(self.humanPlayer.getTricks() == 1)
 		print self.engine.getMasterTrickCount()
 		self.assertTrue(self.engine.getMasterTrickCount() == 1)
@@ -81,7 +79,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 	def testEndPhaseCorrectMultipleTricks(self):
 		hand = spawnDupCards(["A", "J", "K", "Q"], ["Diamonds", "Spades", "Hearts", "Clubs"])
 		self.humanPlayer.takeRelevantCards(hand)
-		self.assertTrue(self.humanPlayer.countHand() == 16)
+		self.assertTrue(self.humanPlayer.handCount() == 16)
 		self.humanPlayer.setGuess(True)
 
 		self.assertTrue(self.humanPlayer.gotGuess() == True)
@@ -89,7 +87,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 		self.engine.endPhase(self.humanPlayer)
 
 		self.assertTrue(self.humanPlayer.gotGuess() == False)
-		self.assertTrue(self.humanPlayer.countHand() == 0)
+		self.assertTrue(self.humanPlayer.handCount() == 0)
 		self.assertTrue(self.humanPlayer.getTricks() == 4)
 		print self.engine.getMasterTrickCount()
 		self.assertTrue(self.engine.getMasterTrickCount() == 4)
@@ -97,7 +95,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 	def testEndPhaseCorrectEndGame(self):
 		hand = spawnDupCards(["3"], ["Diamonds", "Spades", "Hearts", "Clubs"])
 		self.humanPlayer.takeRelevantCards(hand)
-		self.assertTrue(self.humanPlayer.countHand() == 4)
+		self.assertTrue(self.humanPlayer.handCount() == 4)
 		self.humanPlayer.setGuess(True)
 
 		self.assertTrue(self.humanPlayer.gotGuess() == True)
@@ -136,13 +134,13 @@ class EndPhaseEngineTests(unittest.TestCase):
 
 		self.humanPlayer.takeRelevantCards(hand)
 		self.engine.setPlayers([self.humanPlayer, self.botPlayer])
-		self.assertTrue(self.humanPlayer.countHand() == 4)
+		self.assertTrue(self.humanPlayer.handCount() == 4)
 		self.assertTrue(not self.humanPlayer.gotGuess())
 
 		self.engine.endPhase(self.humanPlayer)
 
 		self.assertTrue(not self.humanPlayer.gotGuess())
-		self.assertTrue(self.humanPlayer.countHand() == 0)
+		self.assertTrue(self.humanPlayer.handCount() == 0)
 		self.assertTrue(self.humanPlayer.getTricks() == 1)
 		print self.engine.getMasterTrickCount()
 		self.assertTrue(self.engine.getMasterTrickCount() == 1)
@@ -151,13 +149,13 @@ class EndPhaseEngineTests(unittest.TestCase):
 		hand = spawnDupCards(["A", "J", "K", "Q"], ["Diamonds", "Spades", "Hearts", "Clubs"])
 		self.humanPlayer.takeRelevantCards(hand)
 		self.engine.setPlayers([self.humanPlayer, self.botPlayer])
-		self.assertTrue(self.humanPlayer.countHand() == 16)
+		self.assertTrue(self.humanPlayer.handCount() == 16)
 		self.assertTrue(not self.humanPlayer.gotGuess())
 
 		self.engine.endPhase(self.humanPlayer)
 
 		self.assertTrue(not self.humanPlayer.gotGuess())
-		self.assertTrue(self.humanPlayer.countHand() == 0)
+		self.assertTrue(self.humanPlayer.handCount() == 0)
 		self.assertTrue(self.humanPlayer.getTricks() == 4)
 		print self.engine.getMasterTrickCount()
 		self.assertTrue(self.engine.getMasterTrickCount() == 4)
@@ -165,7 +163,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 	def testEndPhaseIncorrectEndGame(self):
 		hand = spawnDupCards(["3"], ["Diamonds", "Spades", "Hearts", "Clubs"])
 		self.humanPlayer.takeRelevantCards(hand)
-		self.assertTrue(self.humanPlayer.countHand() == 4)
+		self.assertTrue(self.humanPlayer.handCount() == 4)
 
 		self.assertTrue(not self.humanPlayer.gotGuess())
 

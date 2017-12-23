@@ -1,14 +1,12 @@
 import sys
 import unittest
 
-sys.path.append('../../../Modules/Players/')
-sys.path.append('../../../Modules/Engines/')
-sys.path.append('../../../Modules/Cards/')
+sys.path.append('../../../')
 
-from Bot import Bot
-from HumanPlayer import HumanPlayer
-from GoFishCard import GoFishCard as Card
-from GoFish.TestGoFishEngine import TestGoFishEngine
+from Modules.Players.GoFish.Bot import Bot
+from Modules.Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Cards.Card import Card
+from Modules.Engines.GoFish.TestGoFishEngine import TestGoFishEngine
 
 def spawnExtraPlayers(playerType, amount, names = None):
 	# Returns: Array with amount of players specified. Returns object if amount == 1
@@ -35,7 +33,7 @@ class DecisionPhaseEngineTests(unittest.TestCase):
 
 	def test_decision_phase_human_to_bot_pass(self):
 		# Human to bot case
-		test_card = Card("2", "Hearts")
+		test_card = Card("2", None)
 
 		f1 = sys.stdin
 		f = open('../../test_data/decision_phase/decision_phase_test_#1.txt', 'r')
@@ -55,7 +53,7 @@ class DecisionPhaseEngineTests(unittest.TestCase):
 		self.assertEqual(self.humanPlayer.getChosenCard(), test_card)
 
 	def test_decision_phase_human_to_human_pass(self):
-		test_card = Card("2", "Hearts")
+		test_card = Card("2", None)
 		extraPlayer = spawnExtraPlayers(HumanPlayer(), 1)
 
 		f1 = sys.stdin
@@ -76,7 +74,7 @@ class DecisionPhaseEngineTests(unittest.TestCase):
 		self.assertEqual(self.humanPlayer.getChosenCard(), test_card)
 
 	def test_decision_phase_bot_to_bot_pass(self):
-		test_card = Card("2", "Hearts")
+		test_card = Card("2", None)
 		extraPlayer = spawnExtraPlayers(Bot(), 1)
 
 		f1 = sys.stdin
