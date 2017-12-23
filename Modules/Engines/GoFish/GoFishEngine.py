@@ -169,7 +169,6 @@ class GoFishEngine(Engine):
 	def decisionPhase(self, player):
 		self.choosePlayerToAsk(player)
 		self.chooseCard(player)
-		return None
 
 	def tradingPhase(self, player):		
 		chosenCard = self.askForCardRank(player)
