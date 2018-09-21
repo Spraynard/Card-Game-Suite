@@ -14,24 +14,15 @@ class TestGoFishEngine(GoFishEngine):
 		hand = []
 		for i in range(7):
 			hand.append(deck_copy.pop())
-		handString = '';
+		handString = 'Hand: [ ';
 		for i in range(len(hand)):
 			if i < len(hand) - 1:
-				handString += str(hand[i]) + ' '
+				handString += str(hand[i]) + ', '
 			else:
 				handString += str(hand[i])
+		handString += ' ]'
 		return handString
-	# def playerAskLoop(self, choiceListLength):
-	# 	print "This is the test ask loop"
-	# 	print "This is the choice list length: %s" % choiceListLength
-	# 	choice = None
-	# 	while True:
-	# 		choice = int(raw_input("Please enter your choice: ")) - 1
-	# 		print "This is the choice: %s" % choice
-	# 		if choice < choiceListLength:
-	# 			break
-	# 	return choice
-
+		
 	def choosePlayerToAsk(self, player):
 		if self.test:
 			print "current player: %s" % player

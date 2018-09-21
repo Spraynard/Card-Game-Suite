@@ -4,7 +4,7 @@ import sys
 
 sys.path.append('../')
 
-from Modules.Debug.TermColor import *
+# from Modules.Debug.TermColor import *
 
 class Player(object):
 
@@ -18,6 +18,7 @@ class Player(object):
 		# Internal Player's ID
 		self.id = uuid.uuid4()
 
+	# Defines equality from one player to the other based on the internal ID that they have.
 	def __eq__(self, other):
 		return self.id == other.id
 
@@ -73,21 +74,26 @@ class Player(object):
 		# Prints out the hand legibly in a line!
 		hand = self.getHand()
 
-		for c in hand:
-			print c,
+		print 'Hand: [',
+		for i in range(len(hand)):
+			if ( i < ( len(hand) - 1 ) ):
+				print str(hand[i]) + ',',
+			else:
+				print str(hand[i]),
+		print ']'
 
+	# Gives the length of a player's hand.
 	def handCount(self):
 		return len(self.getHand())
 
-	def drawCard(self, card):
-		# Summary: Draws a single card from the deck and then adds it to the player's hand
-		# Input: `Deck` - The deck being used by the players. 
-		# Return: Void if everything goes alright. False if shit is messed up		
-		if not card:
-			return
-		self.takeCard(card)
-
 	#|---------Drawing or Taking Cards Functionality--------|
+
+	def drawCard(self, deck):
+		# Summary: Draws a single card from the deck and then adds it to the player's hand
+		# Input: `Deck` - The deck being used by the players.
+		# Return: Void if everything goes alright. False if shit is messed up
+		self.takeCard(deck.cardFromTop())
+
 
 	def takeCard(self, card):
 		self.hand.append(card)
@@ -98,26 +104,9 @@ class Player(object):
 
 	# |--------End Drawing or Taking Cards Functionality-----|
 
-	def drawHand(self, deck, **gameType):
-		blackjack = None
-		goFish = None
-		handSize = None
-
-		if 'blackjack' in gameType:
-			blackjack = gameType['blackjack']
-			# Oh wait, does blackjack even have a hand size?
-			# 	This can be used for other games though.
-		elif 'goFish' in gameType:
-			goFish = gameType['goFish']
-			# 4 or more players
-			handSize = 5
-			if goFish:
-				# 3 or less players
-				handSize = 7
-
-		for i in range(handSize):
-			drawnCard = deck.draw()
-			self.drawCard(drawnCard)
+	def drawCards(self, deck, amount):
+		for i in range(amount):
+			self.drawCard(deck)
 
 	def resetHand(self):
 		self.hand = []

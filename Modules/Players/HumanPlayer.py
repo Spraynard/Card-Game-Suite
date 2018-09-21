@@ -1,13 +1,13 @@
 import sys
 import random
 
-from ..Player import Player
+from Player import Player
 
 class HumanPlayer(Player):
 	"""Player object, All the commands that the player will use in the game are here."""
-	def __init__(self, name = None):		
+	def __init__(self, name = None):
 		super(HumanPlayer, self).__init__()
-		
+
 		self.tricks = 0
 		# Internal Player's Responses to questions posed by engine
 		self.guess = None
@@ -27,7 +27,7 @@ class HumanPlayer(Player):
 		#	can get some pretty funny names :)
 		from faker import Faker
 		fake = Faker()
-		
+
 		return HumanPlayer(fake.name())
 
 	def victoryStatement(self):
@@ -235,7 +235,7 @@ class HumanPlayer(Player):
 	def populateGiveArray(self, chosenCard):
 		# Giving cards means finding the cards of the specific rank
 		# 	in the hand, taking them out of the hand,
-		# 	and putting them in the give array, which 
+		# 	and putting them in the give array, which
 		# 	removes said cards from hand.
 		hand = self.getHand()
 		for c in hand:

@@ -28,9 +28,9 @@ class Deck(object):
 				card = Card(r, s)
 				self._addCard(card)
 
-	# Drawing from the deck
-	def draw(self):
-		if len(self.getCards()) == 0:
+	# Presents a card from the top of the deck.
+	def cardFromTop(self):
+		if not self.currentAmount():
 			print "Why is my length 0?"
 			return None
 		card = self.getCards().pop()

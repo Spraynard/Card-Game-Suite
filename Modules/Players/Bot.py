@@ -1,22 +1,22 @@
 import sys
 import time
 
-sys.path.append('../../../')
+sys.path.append('../')
 
-from Modules.Players.GoFish.HumanPlayer import HumanPlayer
-from Modules.Cards.Card import Card
+from HumanPlayer import HumanPlayer
+# from MModules import Card
 
 class Bot(HumanPlayer):
 	"""Bot object, which is a player. There are taunts available to bots to rouse up the player whenver they make a mistake"""
 	def __init__(self, name = None):
 		super(Bot, self).__init__(name)
-		
+
 		# These are needed for bot specific functionality
 		self.taunts = ["You're going to have to try harder than that!\"" ,
 						"I thought that I was playing a real person, not a bot!\"" ,
 						"What the heck are you doing?\"" ,
 						"Dang, I didn't know I was playing a baby tonight\"" ]
-		
+
 		self.rejections = ["%s: \"No", "%s: \"Nope", "%s: \"I sure do not", "%s: \"Hahaha, no", "%s: \"You wish!"]
 		self.chooseDict = {}
 
@@ -67,7 +67,7 @@ class Bot(HumanPlayer):
 			self.setChosenCard(Card(random.choice(chooseableCards)))
 		else:
 			self.setChosenCard(random.choice(hand))
-	
+
 	# chooseDict Functionality
 	def _getChooseDict(self):
 		return self.chooseDict

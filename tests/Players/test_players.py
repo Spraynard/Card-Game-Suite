@@ -3,13 +3,12 @@ import sys
 
 import unittest
 
-sys.path.append('../../Modules/Players/')
-sys.path.append('../../Modules/Cards/')
+sys.path.append('../../')
 
-from HumanPlayer import HumanPlayer
-from Bot import Bot
+from Modules.Players.HumanPlayer import HumanPlayer
+from Modules.Players.Bot import Bot
 
-from Deck import Deck
+from Modules.Cards.Deck import Deck
 
 class PlayerTests(unittest.TestCase):
 
@@ -19,9 +18,12 @@ class PlayerTests(unittest.TestCase):
 		self.deck = False
 
 	def test_human_player_is_not_bot(self):
-		self.player_1 = HumanPlayer()
+		import inspect
+		self.player_1 = HumanPlayer
 		self.player_2 = Bot
 
+		self.assertTrue(inspect.isclass(self.player_1))
+		self.assertTrue(inspect.isclass(self.player_2))
 		self.assertFalse(isinstance(self.player_1, self.player_2))
 
 	def test_two_diff_not_equal(self):
@@ -43,19 +45,19 @@ class PlayerTests(unittest.TestCase):
 		# Make sure the deck is 52 cards (one full deck)
 		self.assertIs(self.deck.currentAmount(), 52)
 
-		# Player draws a full hand from the deck
-		self.player_1.drawHand(self.deck)
+		# Player draws a full seven card hand from the deck
+		self.player_1.drawCards(self.deck, 7)
 
 		# Make sure after drawing that the deck takes 7
 		# 	cards away from its full total
 		self.assertIs(self.deck.currentAmount(), 45)
 
 		# Assert that the player actually has a hand
-		self.assertIsNot(self.player_1.getHand(), []) 
+		self.assertGreater(self.player_1.handCount(), 0)
 
 		# At least for Go Fish, the hand should be 7
 		# 	cards big when the player is starting out
-		self.assertIs(self.player_1.countHand(), 7)
+		self.assertIs(self.player_1.handCount(), 7)
 
 	def tearDown(self):
 		self.player_1 = False
