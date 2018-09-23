@@ -1,7 +1,7 @@
 import sys
 
-from Menu import Menu
-from config.menuConfig import * 
+from .Menu import Menu
+from .config.menuConfig import * 
 
 class MainMenu(Menu):
 	def __init__(self):
@@ -9,7 +9,7 @@ class MainMenu(Menu):
 		self.gameList = []
 
 	def populateGameList(self):
-		for value in games.keys():
+		for value in list(games.keys()):
 			self.gameList.append(games[value]['title'])
 
 	def displayGameList(self):
@@ -18,5 +18,5 @@ class MainMenu(Menu):
 
 	def start(self):
 		self.populateGameList()
-		print "Hello and welcome. These are the games that\
-		You are able to play!", self.gameList
+		print("Hello and welcome. These are the games that\
+		You are able to play!", self.gameList)

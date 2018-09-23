@@ -4,8 +4,8 @@ sys.path.append('../../')
 
 from ..Engine import Engine
 
-from Modules.Players.GoFish.HumanPlayer import HumanPlayer
-from Modules.Players.GoFish.Bot import Bot
+from Modules.Players.HumanPlayer import HumanPlayer
+from Modules.Players.Bot import Bot
 from Modules.Cards.Card import Card
 
 class GoFishEngine(Engine):
@@ -17,7 +17,7 @@ class GoFishEngine(Engine):
 	def getMasterTrickCount(self):
 		# Return Engine's total trick count
 		return self.trickCount
-		
+
 	def addMasterTrickCount(self, amount):
 		# Add the amount referenced in the amount param to the total trick count
 		self.trickCount += amount
@@ -29,7 +29,7 @@ class GoFishEngine(Engine):
 	def displayCurrentPlayerInfo(self, player):
 		# Give
 		if isinstance(player, Bot):
-			# No need to display if 
+			# No need to display if
 			# 	the player is a bot
 			return
 		player.displayTricks()
@@ -40,9 +40,9 @@ class GoFishEngine(Engine):
 		# 	Allows me to ask for info from a player while also using DRY conventions!
 		choice = None
 		while True:
-			choice = int(raw_input("Please enter your choice: ")) - 1
+			choice = int(input("Please enter your choice: ")) - 1
 			if (choice < 0) or (choice >= choiceListLength):
-				print "\nError: That is not one of the player choices"
+				print("\nError: That is not one of the player choices")
 			else:
 				break
 		return choice
@@ -61,9 +61,9 @@ class GoFishEngine(Engine):
 			bot.setChosenPlayer(random.choice(choiceList))
 		else:
 			# Implement Player() player to ask
-			print "Which player will you ask a card from?"
+			print("Which player will you ask a card from?")
 			for i in range(len(choiceList)):
-				print "#%s: %s" % ((i + 1), choiceList[i])
+				print("#%s: %s" % ((i + 1), choiceList[i]))
 			choice = self.playerAskLoop(len(choiceList))
 
 		player.setChosenPlayer(choiceList[choice])
@@ -84,12 +84,12 @@ class GoFishEngine(Engine):
 
 			if not self.variant:
 				while True:
-					rank = raw_input("What card rank do you want to ask for (e.g. 2 - Ace)?: ").lower().title()
+					rank = input("What card rank do you want to ask for (e.g. 2 - Ace)?: ").lower().title()
 					flagCard = Card(rank)
 					if not flagCard.acceptableRank():
-						print "\nError: That is not an acceptable card rank. Please choose again."
+						print("\nError: That is not an acceptable card rank. Please choose again.")
 					elif not player.hasCard(flagCard):
-						print "\nError: You don't even have any of those cards in your hand! Try again."
+						print("\nError: You don't even have any of those cards in your hand! Try again.")
 					else:
 						player.setChosenCard(Card(rank))
 						break
@@ -107,7 +107,7 @@ class GoFishEngine(Engine):
 		# Summary: Once the player chooses a card rank and another player to ask,
 		# 		those values are stored in the player object and extracted in other code later on.
 		# Input: `player` - a player object, can be a humanplayer or a bot
-		# 
+		#
 		chosenPlayerCardCount = False
 		chosenPlayerGiveArray = False
 
@@ -133,7 +133,7 @@ class GoFishEngine(Engine):
 				# If the other player is a bot, they will taunt the shit out of you
 				# 	and probably make you really sad af.
 				bot = chosenPlayer
-				print bot.tauntPlayer()
+				print(bot.tauntPlayer())
 			else:
 				chosenPlayer.talk('victory')
 
@@ -147,7 +147,7 @@ class GoFishEngine(Engine):
 
 		for p in players:
 			# print p + ': ' + p.showHand()
-			print "%s: %s" % (p, p.showHand())
+			print("%s: %s" % (p, p.showHand()))
 	# End Player Handling Functionality
 
 	def dealHands(self):
@@ -170,14 +170,14 @@ class GoFishEngine(Engine):
 		self.choosePlayerToAsk(player)
 		self.chooseCard(player)
 
-	def tradingPhase(self, player):		
+	def tradingPhase(self, player):
 		chosenCard = self.askForCardRank(player)
 		# Player state is valuable after they ask for card.
 		deck = self.getDeck()
 
 		if not player.gotGuess():
 			if (player.handCount() == 0) and (deck.currentAmount() == 0):
-				print "Hey everyone, laugh at %s! They got kicked out of the game for losing!" % player
+				print("Hey everyone, laugh at %s! They got kicked out of the game for losing!" % player)
 				self.removePlayer(player)
 			else:
 				drawnCard = deck.draw()

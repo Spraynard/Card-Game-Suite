@@ -11,4 +11,4 @@ class Inputter(object):
 		inputs = self.getInputList()
 
 		for i in range(inputs):
-			print "#%s: %s" % ((i + 1), inputs[i])
+			print("#%s: %s" % ((i + 1), inputs[i]))

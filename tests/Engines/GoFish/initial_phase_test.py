@@ -47,7 +47,7 @@ class InitialPhaseEngineTests(unittest.TestCase):
 
 		# Splitting the output is a nice parse to apply to
 		# 	variables
-		print output
+		print(output)
 		givenTrickOutput = output.split('\n')[0]
 		givenHandOutput = output.split('\n')[1]
 

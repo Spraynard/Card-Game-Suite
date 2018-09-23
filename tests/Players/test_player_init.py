@@ -3,13 +3,11 @@ import unittest
 import os
 import sys
 
-sys.path.append('../') 
-sys.path.append('../Modules/Players/')
-sys.path.append('../Modules/Cards/')
+sys.path.append('../../')
 
-from GoFishStarter import GoFishStarter
-from Player import Player
-from Bot import Bot
+from Modules.Starters.GoFishStarter import GoFishStarter
+from Modules.Players.Player import Player
+from Modules.Players.Bot import Bot
 
 class PlayerInitTests(unittest.TestCase):
 	def setUp(self):
@@ -18,7 +16,7 @@ class PlayerInitTests(unittest.TestCase):
 			"This Go Fish game is not in test mode :<")
 
 	def test_init_player_names(self):
-		print "Testing if players can be added \n"
+		print("Testing if players can be added \n")
 		test_accept = [Player("George"), Bot()]
 
 		f1 = sys.stdin

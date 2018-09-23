@@ -3,7 +3,7 @@ import time
 
 sys.path.append('../')
 
-from HumanPlayer import HumanPlayer
+from .HumanPlayer import HumanPlayer
 # from MModules import Card
 
 class Bot(HumanPlayer):
@@ -47,7 +47,7 @@ class Bot(HumanPlayer):
 		maxCount = None
 		rankMax = None
 		cD = self._getChooseDict()
-		chooseDictKeys = cD.keys()
+		chooseDictKeys = list(cD.keys())
 
 		for k in chooseDictKeys:
 			currentLength = len(cD[k])

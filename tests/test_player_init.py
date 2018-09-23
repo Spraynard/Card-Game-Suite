@@ -18,7 +18,7 @@ class PlayerInitTests(unittest.TestCase):
 			"This Go Fish game is not in test mode :<")
 
 	def test_init_player_names(self):
-		print "Testing if players can be added \n"
+		print("Testing if players can be added \n")
 		test_accept = [Player("George"), Bot()]
 
 		f1 = sys.stdin

@@ -19,11 +19,11 @@ import sys
 
 sys.path.append('../../')
 
-from Cards.Card import Card
 
-from Players.HumanPlayer import HumanPlayer
-from Players.Bot import Bot
-from Engines.GoFish.GoFishEngine import GoFishEngine
+from Modules.Cards.Card import Card
+from Modules.Players.HumanPlayer import HumanPlayer
+from Modules.Players.Bot import Bot
+from Modules.Engines.GoFish.GoFishEngine import GoFishEngine
 
 class GoFishStarter:
 	def __init__(self, test = False):

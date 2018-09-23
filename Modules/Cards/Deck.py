@@ -18,7 +18,7 @@ class Deck(object):
 		self.getCards().append(card)
 
 	def _buildDeck(self):
-		from Card import Card
+		from .Card import Card
 
 		ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
 		suits = ["Clubs", "Spades", "Diamonds", "Hearts"]
@@ -31,7 +31,7 @@ class Deck(object):
 	# Presents a card from the top of the deck.
 	def cardFromTop(self):
 		if not self.currentAmount():
-			print "Why is my length 0?"
+			print("Why is my length 0?")
 			return None
 		card = self.getCards().pop()
 		return card
@@ -44,7 +44,7 @@ class Deck(object):
 
 	def listCards(self):
 		for i in range(0, len(self.getCards())):
-			print self.getCards()[i]
+			print(self.getCards()[i])
 
 	def hasCard(self, card):
 		if card in self.getCards():

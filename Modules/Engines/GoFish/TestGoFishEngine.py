@@ -1,4 +1,4 @@
-from GoFishEngine import GoFishEngine
+from .GoFishEngine import GoFishEngine
 
 class TestGoFishEngine(GoFishEngine):
 	def __init__(self, test = False):
@@ -25,11 +25,11 @@ class TestGoFishEngine(GoFishEngine):
 		
 	def choosePlayerToAsk(self, player):
 		if self.test:
-			print "current player: %s" % player
-			print "self.getPlayers: %s" % self.getPlayers()
-			print "choiceList: %s" % choiceList
+			print("current player: %s" % player)
+			print("self.getPlayers: %s" % self.getPlayers())
+			print("choiceList: %s" % choiceList)
 			choiceList.remove(player)
-			print "choiceList without current player: %s" % choiceList
+			print("choiceList without current player: %s" % choiceList)
 
 		return super(TestGoFishEngine, self).choosePlayerToAsk(player)
 

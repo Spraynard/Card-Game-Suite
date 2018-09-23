@@ -4,7 +4,7 @@ sys.path.append('../../')
 
 from Modules.Cards.Deck import Deck
 from Modules.Cards.Card import Card
-from Modules.Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Players.HumanPlayer import HumanPlayer
 
 class Engine(object):
 	# Controls the start, turn, and checks of the actual game.
@@ -36,7 +36,7 @@ class Engine(object):
 
 	def getPlayerAmount(self):
 		return len(self.players)
-		
+
 	def setPlayers(self, players):
 		self.players = players
 
@@ -112,7 +112,7 @@ class Engine(object):
 		else:
 			raise Exception("What the hell are you putting in here, man? That ain't cool.")
 
-		print """Congratulations %s, you have won the epic game of Go Fish with a trick count of %s. Make sure to tell all of your other friends (if you have any) that you won one of the most childish games in all the land!""" % (winning_players, winning_trick_amount)
+		print("""Congratulations %s, you have won the epic game of Go Fish with a trick count of %s. Make sure to tell all of your other friends (if you have any) that you won one of the most childish games in all the land!""" % (winning_players, winning_trick_amount))
 
 
 	def gameStart(self):

@@ -73,7 +73,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 		self.assertTrue(self.humanPlayer.gotGuess() == False)
 		self.assertTrue(self.humanPlayer.handCount() == 0)
 		self.assertTrue(self.humanPlayer.getTricks() == 1)
-		print self.engine.getMasterTrickCount()
+		print(self.engine.getMasterTrickCount())
 		self.assertTrue(self.engine.getMasterTrickCount() == 1)
 
 	def testEndPhaseCorrectMultipleTricks(self):
@@ -89,7 +89,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 		self.assertTrue(self.humanPlayer.gotGuess() == False)
 		self.assertTrue(self.humanPlayer.handCount() == 0)
 		self.assertTrue(self.humanPlayer.getTricks() == 4)
-		print self.engine.getMasterTrickCount()
+		print(self.engine.getMasterTrickCount())
 		self.assertTrue(self.engine.getMasterTrickCount() == 4)
 
 	def testEndPhaseCorrectEndGame(self):
@@ -113,7 +113,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 
 
 		winningPhrase = """Congratulations %s, you have won the epic game of Go Fish with a trick count of %s. Make sure to tell all of your other friends (if you have any) that you won one of the most childish games in all the land!""" % (self.humanPlayer, 1)
-		self.assertEquals(output, winningPhrase)
+		self.assertEqual(output, winningPhrase)
 
 	def testEndPhaseIncorrectNoTricks(self):
 		self.humanPlayer.takeRelevantCards([Card("A", "Spades")])
@@ -142,7 +142,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 		self.assertTrue(not self.humanPlayer.gotGuess())
 		self.assertTrue(self.humanPlayer.handCount() == 0)
 		self.assertTrue(self.humanPlayer.getTricks() == 1)
-		print self.engine.getMasterTrickCount()
+		print(self.engine.getMasterTrickCount())
 		self.assertTrue(self.engine.getMasterTrickCount() == 1)
 
 	def testEndPhaseIncorrectMultipleTricks(self):
@@ -157,7 +157,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 		self.assertTrue(not self.humanPlayer.gotGuess())
 		self.assertTrue(self.humanPlayer.handCount() == 0)
 		self.assertTrue(self.humanPlayer.getTricks() == 4)
-		print self.engine.getMasterTrickCount()
+		print(self.engine.getMasterTrickCount())
 		self.assertTrue(self.engine.getMasterTrickCount() == 4)
 
 	def testEndPhaseIncorrectEndGame(self):
@@ -180,7 +180,7 @@ class EndPhaseEngineTests(unittest.TestCase):
 
 
 		winningPhrase = """Congratulations %s, you have won the epic game of Go Fish with a trick count of %s. Make sure to tell all of your other friends (if you have any) that you won one of the most childish games in all the land!""" % (self.humanPlayer, 1)
-		self.assertEquals(output, winningPhrase)
+		self.assertEqual(output, winningPhrase)
 
 	
 	def tearDown(self):

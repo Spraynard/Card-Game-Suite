@@ -74,13 +74,13 @@ class Player(object):
 		# Prints out the hand legibly in a line!
 		hand = self.getHand()
 
-		print 'Hand: [',
+		print('Hand: [', end=' ')
 		for i in range(len(hand)):
 			if ( i < ( len(hand) - 1 ) ):
-				print str(hand[i]) + ',',
+				print(str(hand[i]) + ',', end=' ')
 			else:
-				print str(hand[i]),
-		print ']'
+				print(str(hand[i]), end=' ')
+		print(']')
 
 	# Gives the length of a player's hand.
 	def handCount(self):
