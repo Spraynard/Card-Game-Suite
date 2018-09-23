@@ -20,7 +20,7 @@ class PlayerInitTests(unittest.TestCase):
 		test_accept = [Player("George"), Bot()]
 
 		f1 = sys.stdin
-		f = open('test_data/single_player_name.txt', 'r')
+		f = open('../test_data/single_player_name.txt', 'r')
 		sys.stdin = f
 		self.starter.initializeGoFish()
 		f.close()

@@ -153,14 +153,16 @@ class GoFishEngine(Engine):
 	def dealHands(self):
 		deck = self.getDeck()
 		players = self.getPlayers()
-		# Four players or more
-		fourOrLess = True
-		if len(players) > 3:
-			fourOrLess = False
+
+		# Deal Five cards to players
+		card_draw_amount = 5
+
+		# Unless there are four or less players. Then we deal 7
+		if len(players) < 5:
+			card_draw_amount = 7
 
 		for p in players:
-			p.drawHand(deck, goFish = fourOrLess)
-	# Phases Coded Here
+			p.drawCards(deck, card_draw_amount)
 
 	# Game Phases Here
 	def initialPhase(self, player):
