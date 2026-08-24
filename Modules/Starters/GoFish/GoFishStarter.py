@@ -17,13 +17,9 @@ from time import sleep as sleep
 
 import sys
 
-sys.path.append('../../')
-
-from Cards.Card import Card
-
-from Players.GoFish.HumanPlayer import HumanPlayer
-from Players.GoFish.Bot import Bot
-from Engines.GoFish.GoFishEngine import GoFishEngine
+from Modules.Players.HumanPlayer import HumanPlayer
+from Modules.Players.Bot import Bot
+from Modules.Engines.GoFish.GoFishEngine import GoFishEngine
 
 class GoFishStarter:
 	def __init__(self, test = False):
@@ -61,15 +57,15 @@ class GoFishStarter:
 	def askPlayerNames(self, player_n):
 		names = False
 		while not names and self.getIfHumanPlayers():
-			name_flag = str(raw_input("Would you like to name yourselves (Y/N)?: ")).lower()
+			name_flag = str(input("Would you like to name yourselves (Y/N)?: ")).lower()
 			# if not (name_flag == 'y') or not (name_flag == 'n'):
-			# 	print "Please input 'y' or 'n'"
+			# 	print("Please input 'y' or 'n'")
 			# else:
 			names = []
 			if name_flag == 'y':
-				print "Okay, please input the names for each player: "
+				print("Okay, please input the names for each player: ")
 				for i in range(player_n):
-					i_name = raw_input("Player #%s: " % (i + 1))
+					i_name = input("Player #%s: " % (i + 1))
 					names.append(i_name)
 
 					if (i == player_n - 1):
@@ -115,16 +111,16 @@ class GoFishStarter:
 			return False
 		while True:
 			try:
-				t_bot_n = int(raw_input("Please enter the number of bots: "))
+				t_bot_n = int(input("Please enter the number of bots: "))
 			except:
-				print "Nope, need to enter a number between 1 and %s" % tot_bots
+				print("Nope, need to enter a number between 1 and %s" % tot_bots)
 				continue
 			if not t_bot_n:
 				bot_n = 0
 				break
 			else:
 				if t_bot_n > tot_bots:
-					print "You can't have more than %s bots right now" % tot_bots
+					print("You can't have more than %s bots right now" % tot_bots)
 				else:
 					bot_n = t_bot_n
 					break
@@ -132,20 +128,20 @@ class GoFishStarter:
 
 	def askPlayerN(self):
 		player_n = False
-		
+
 		while True:
 			t_player_n = False
 			try:
-				t_player_n = int(raw_input("Please enter the number of human players: "))
+				t_player_n = int(input("Please enter the number of human players: "))
 			except:
-				print "Nope need to enter a # between 0 and 4"
+				print("Nope need to enter a # between 0 and 4")
 				continue
 			if not t_player_n:
-				print "Haha, you're playing an all bot game. That's pretty nice!"
+				print("Haha, you're playing an all bot game. That's pretty nice!")
 				break
 			else:
 				if t_player_n > 10:
-					print "You can't have more than ten players"
+					print("You can't have more than ten players")
 				else:
 					# Limiting the amount of players to 1 right now
 					# player_n = 1
@@ -162,7 +158,6 @@ class GoFishStarter:
 			return self.getPlayerN()
 		except:
 			raise Exception("There is a problem in `handlePlayerInit()`")
-	
 	def handleBotInit(self):
 		try:
 			bot_n = self.askBotN()
@@ -178,9 +173,9 @@ class GoFishStarter:
 
 	def initializeGoFish(self):
 		if self.test:
-			print "This is now in test mode"
+			print("This is now in test mode")
 			sleep(2)
-		print "Welcome to another round of the famous game, Go Fish!"
+		print("Welcome to another round of the famous game, Go Fish!")
 		player_n = self.handlePlayerInit()
 		bot_n = self.handleBotInit()
 		self.addAllPlayers(player_n, bot_n)

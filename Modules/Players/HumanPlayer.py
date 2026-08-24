@@ -1,7 +1,7 @@
 import sys
 import random
 
-from Player import Player
+from .Player import Player
 
 class HumanPlayer(Player):
 	"""Player object, All the commands that the player will use in the game are here."""
@@ -34,19 +34,23 @@ class HumanPlayer(Player):
 		statementDict = {
 			1 : "\"I sure do not!\"",
 		}
-		print statementDict[random.choice(statementDict.keys())]
+		print(statementDict[random.choice(statementDict.keys())])
 
 	def defeatStatement(self):
 		statementDict = {
 			1 : "%s: \"I do have %s cards. Here they are\": %s",
 		}
-		print statementDict[random.choice(statementDict.keys())] % (self.getName(), len(self.getGiveArray()), self.getGiveArray())
+		print(statementDict[random.choice(statementDict.keys())] % (self.getName(), len(self.getGiveArray()), self.getGiveArray()))
 
 	def askOtherPlayer(self):
 		statementDict = {
 			1 : "%s: \"Hey %s, Do you have any %ss?\"",
 		}
-		print statementDict[random.choice(statementDict.keys())] % (self.getName(), self.getChosenPlayer(), self.getChosenCard().getRank())
+		print(statementDict[random.choice(list(statementDict.keys()))] % (
+			self.getName(), 
+			self.getChosenPlayer(), 
+			self.getChosenCard().getRank())
+		)
 
 	def exclaim(self):
 		if len(self.getGiveArray()) == 1:
@@ -61,7 +65,7 @@ class HumanPlayer(Player):
 				2 : "%s: \"Wow, you're really good at this! I have %s cards of that rank. Here they are you scallywag: %s\"",
 				3 : "%s: \"Are you cheating? I have %s cards of that rank. Take em ya dingus! %s\""
 			}
-		print statementDict[random.choice(statementDict.keys())] % (self.getName(), len(self.getGiveArray()), self.getGiveArray())
+		print(statementDict[random.choice(list(statementDict.keys()))] % (self.getName(), len(self.getGiveArray()), self.getGiveArray()))
 
 	def talk(self, reason):
 		reasonDict = {
@@ -136,11 +140,11 @@ class HumanPlayer(Player):
 		if self.hasTricks():
 			trick_n = self.getTricks()
 			if trick_n == 1:
-				print "You currently have %s trick" % trick_n
+				print("You currently have %s trick" % trick_n)
 			else:
-				print "You currently have %s tricks" % trick_n
+				print("You currently have %s tricks" % trick_n)
 		else:
-			print "You currently have 0 tricks"
+			print("You currently have 0 tricks")
 
 	def delTrickFromHand(self, trick):
 		hand = self.getHand()

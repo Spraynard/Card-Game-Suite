@@ -5,6 +5,8 @@ import sys
 sys.path.append('../')
 
 # from Modules.Debug.TermColor import *
+from Modules.Cards.Card import Card
+from Modules.Cards.Deck import Deck
 
 class Player(object):
 
@@ -74,13 +76,13 @@ class Player(object):
 		# Prints out the hand legibly in a line!
 		hand = self.getHand()
 
-		print 'Hand: [',
+		print('Hand: [')
 		for i in range(len(hand)):
 			if ( i < ( len(hand) - 1 ) ):
-				print str(hand[i]) + ',',
+				print(str(hand[i]) + ',')
 			else:
-				print str(hand[i]),
-		print ']'
+				print(str(hand[i]))
+		print(']')
 
 	# Gives the length of a player's hand.
 	def handCount(self):
@@ -88,34 +90,27 @@ class Player(object):
 
 	#|---------Drawing or Taking Cards Functionality--------|
 
-	def drawCard(self, deck):
+	def drawCard(self, deck: Deck) -> Card:
 		# Summary: Draws a single card from the deck and then adds it to the player's hand
 		# Input: `Deck` - The deck being used by the players.
 		# Return: Void if everything goes alright. False if shit is messed up
-		self.takeCard(deck.cardFromTop())
+		card = deck.cardFromTop()
+		self.takeCard(card)
+		return card
 
+	def drawCards(self, deck: Deck, amount: int) -> list:
+		cards = []
+		for i in range(amount):
+			cards.append(self.drawCard(deck))
+		return cards
 
-	def takeCard(self, card):
+	def takeCard(self, card) -> None:
 		self.hand.append(card)
 
-	def takeRelevantCards(self, cardArray):
+	def takeRelevantCards(self, cardArray) -> None:
 		for c in cardArray:
 			self.takeCard(c)
 
 	# |--------End Drawing or Taking Cards Functionality-----|
-
-	def drawCards(self, deck, amount):
-		for i in range(amount):
-			self.drawCard(deck)
-
-	def resetHand(self):
+	def resetHand(self) -> None:
 		self.hand = []
-
-
- 	##########################
- 	# Go Fish specific methods
- 	##########################
-
-
-
-

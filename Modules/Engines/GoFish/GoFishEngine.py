@@ -4,8 +4,9 @@ sys.path.append('../../')
 
 from ..Engine import Engine
 
-from Modules.Players.GoFish.HumanPlayer import HumanPlayer
-from Modules.Players.GoFish.Bot import Bot
+from Modules.Players.HumanPlayer import HumanPlayer
+from Modules.Players.Player import Player
+from Modules.Players.Bot import Bot
 from Modules.Cards.Card import Card
 
 class GoFishEngine(Engine):
@@ -40,14 +41,14 @@ class GoFishEngine(Engine):
 		# 	Allows me to ask for info from a player while also using DRY conventions!
 		choice = None
 		while True:
-			choice = int(raw_input("Please enter your choice: ")) - 1
+			choice = int(input("Please enter your choice: ")) - 1
 			if (choice < 0) or (choice >= choiceListLength):
-				print "\nError: That is not one of the player choices"
+				print("\nError: That is not one of the player choices")
 			else:
 				break
 		return choice
 
-	def choosePlayerToAsk(self, player):
+	def choosePlayerToAsk(self, player: Player):
 		# Summary: Instructs the player to choose another player to ask for a card. This code also handles bots.
 		# Input: `Player` - A player object
 		# Returns: Void
@@ -61,9 +62,9 @@ class GoFishEngine(Engine):
 			bot.setChosenPlayer(random.choice(choiceList))
 		else:
 			# Implement Player() player to ask
-			print "Which player will you ask a card from?"
+			print("Which player will you ask a card from?")
 			for i in range(len(choiceList)):
-				print "#%s: %s" % ((i + 1), choiceList[i])
+				print("#%s: %s" % ((i + 1), choiceList[i]))
 			choice = self.playerAskLoop(len(choiceList))
 
 		player.setChosenPlayer(choiceList[choice])
@@ -84,12 +85,12 @@ class GoFishEngine(Engine):
 
 			if not self.variant:
 				while True:
-					rank = raw_input("What card rank do you want to ask for (e.g. 2 - Ace)?: ").lower().title()
+					rank = input("What card rank do you want to ask for (e.g. 2 - Ace)?: ").lower().title()
 					flagCard = Card(rank)
 					if not flagCard.acceptableRank():
-						print "\nError: That is not an acceptable card rank. Please choose again."
+						print("\nError: That is not an acceptable card rank. Please choose again.")
 					elif not player.hasCard(flagCard):
-						print "\nError: You don't even have any of those cards in your hand! Try again."
+						print("\nError: You don't even have any of those cards in your hand! Try again.")
 					else:
 						player.setChosenCard(Card(rank))
 						break
@@ -97,9 +98,9 @@ class GoFishEngine(Engine):
 			# if self.variant == 1:
 			# 	suit = None
 			# 	while True:
-			# 		suit = str(raw_input("What card suit do you want to ask for (e.g. 'Clubs', 'Spades')?: ")).lower().title()
+			# 		suit = str(input("What card suit do you want to ask for (e.g. 'Clubs', 'Spades')?: ")).lower().title()
 			# 		if not suit in correctInputDict['suits']:
-			# 			print "That is not an acceptable card suit. Please choose again"
+			# 			print("That is not an acceptable card suit. Please choose again")
 			# 		else:
 			# 			break
 
@@ -133,7 +134,7 @@ class GoFishEngine(Engine):
 				# If the other player is a bot, they will taunt the shit out of you
 				# 	and probably make you really sad af.
 				bot = chosenPlayer
-				print bot.tauntPlayer()
+				print(bot.tauntPlayer())
 			else:
 				chosenPlayer.talk('victory')
 
@@ -147,19 +148,18 @@ class GoFishEngine(Engine):
 
 		for p in players:
 			# print p + ': ' + p.showHand()
-			print "%s: %s" % (p, p.showHand())
+			print("%s: %s" % (p, p.showHand()))
 	# End Player Handling Functionality
 
 	def dealHands(self):
 		deck = self.getDeck()
 		players = self.getPlayers()
-		# Four players or more
-		fourOrLess = True
-		if len(players) > 3:
-			fourOrLess = False
-
+		# Three Players or more
+		moreThanThree = True if len(players) > 3 else False
+		numberOfCards = 5 if moreThanThree else 7
+		
 		for p in players:
-			p.drawHand(deck, goFish = fourOrLess)
+			p.drawCards(deck, numberOfCards)
 	# Phases Coded Here
 
 	# Game Phases Here
@@ -170,19 +170,18 @@ class GoFishEngine(Engine):
 		self.choosePlayerToAsk(player)
 		self.chooseCard(player)
 
-	def tradingPhase(self, player):		
+	def tradingPhase(self, player: Player):		
 		chosenCard = self.askForCardRank(player)
 		# Player state is valuable after they ask for card.
 		deck = self.getDeck()
 
 		if not player.gotGuess():
 			if (player.handCount() == 0) and (deck.currentAmount() == 0):
-				print "Hey everyone, laugh at %s! They got kicked out of the game for losing!" % player
+				print("Hey everyone, laugh at %s! They got kicked out of the game for losing!" % player)
 				self.removePlayer(player)
 			else:
-				drawnCard = deck.draw()
-				player.drawCard(drawnCard)
-
+				drawnCard = player.drawCard(deck)
+				
 				if ( drawnCard == chosenCard ):
 					self.takeTurn()
 

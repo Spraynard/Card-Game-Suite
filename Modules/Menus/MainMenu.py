@@ -18,5 +18,5 @@ class MainMenu(Menu):
 
 	def start(self):
 		self.populateGameList()
-		print "Hello and welcome. These are the games that\
+		print("Hello and welcome. These are the games that\)
 		You are able to play!", self.gameList

@@ -3,7 +3,8 @@ import time
 
 sys.path.append('../')
 
-from HumanPlayer import HumanPlayer
+from .HumanPlayer import HumanPlayer
+from faker import Faker
 # from MModules import Card
 
 class Bot(HumanPlayer):
@@ -27,7 +28,6 @@ class Bot(HumanPlayer):
 		return "Bot - %s" % self.name
 
 	def randomName(self):
-		from faker import Faker
 		fake = Faker()
 		return Bot(fake.name())
 

@@ -1,6 +1,7 @@
 import sys
 
-from Modules.Menus.MainMenu import MainMenu
+from Modules.Starters.GoFish.GoFishStarter import GoFishStarter
 
 if __name__ == '__main__':
-	MainMenu().start()
+	starter = GoFishStarter()
+	starter.initializeGoFish()
