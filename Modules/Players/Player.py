@@ -7,13 +7,14 @@ sys.path.append('../')
 # from Modules.Debug.TermColor import *
 from Modules.Cards.Card import Card
 from Modules.Cards.Deck import Deck
+from faker import Faker
 
 class Player(object):
 
 	################
 	# INITIALIZATION
 	################
-
+	name = ""
 	def __init__(self, name = None):
 		self.hand = []
 		self.name = name
@@ -36,7 +37,6 @@ class Player(object):
 	def randomName(self):
 		# Returns a `Player` with a random name from the Faker lib
 		#	can get some pretty funny names :)
-		from faker import Faker
 		fake = Faker()
 		return Player(fake.name())
 
@@ -71,18 +71,6 @@ class Player(object):
 
 	def hasHand(self):
 		return self.handCount() > 0
-
-	def showHand(self):
-		# Prints out the hand legibly in a line!
-		hand = self.getHand()
-
-		print('Hand: [')
-		for i in range(len(hand)):
-			if ( i < ( len(hand) - 1 ) ):
-				print(str(hand[i]) + ',')
-			else:
-				print(str(hand[i]))
-		print(']')
 
 	# Gives the length of a player's hand.
 	def handCount(self):

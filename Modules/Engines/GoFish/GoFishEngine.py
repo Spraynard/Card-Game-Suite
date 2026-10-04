@@ -8,6 +8,7 @@ from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Players.Player import Player
 from Modules.Players.Bot import Bot
 from Modules.Cards.Card import Card
+from Modules.Views.TerminalOutput import TerminalOutput
 
 class GoFishEngine(Engine):
 	def __init__(self):
@@ -23,10 +24,6 @@ class GoFishEngine(Engine):
 		# Add the amount referenced in the amount param to the total trick count
 		self.trickCount += amount
 
-	def displayHand(self, player):
-		# Prints out the player's hand that is returned from a HumanPlayer's class method
-		player.showHand()
-
 	def displayCurrentPlayerInfo(self, player):
 		# Give
 		if isinstance(player, Bot):
@@ -34,7 +31,7 @@ class GoFishEngine(Engine):
 			# 	the player is a bot
 			return
 		player.displayTricks()
-		self.displayHand(player)
+		TerminalOutput.hand(player)
 
 	def playerAskLoop(self, choiceListLength):
 		# Based on the length of the choiceList.
@@ -147,9 +144,8 @@ class GoFishEngine(Engine):
 		players = self.getPlayers()
 
 		for p in players:
-			# print p + ': ' + p.showHand()
-			print("%s: %s" % (p, p.showHand()))
-	# End Player Handling Functionality
+			print("%s: %s" % (p, player.getHand()))
+			# End Player Handling Functionality
 
 	def dealHands(self):
 		deck = self.getDeck()

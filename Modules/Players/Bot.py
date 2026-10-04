@@ -9,9 +9,9 @@ from faker import Faker
 
 class Bot(HumanPlayer):
 	"""Bot object, which is a player. There are taunts available to bots to rouse up the player whenver they make a mistake"""
-	def __init__(self, name = None):
-		super(Bot, self).__init__(name)
-
+	def __init__(self, name = "[Empty]"):
+		super().__init__(name)
+		
 		# These are needed for bot specific functionality
 		self.taunts = ["You're going to have to try harder than that!\"" ,
 						"I thought that I was playing a real person, not a bot!\"" ,
@@ -22,10 +22,10 @@ class Bot(HumanPlayer):
 		self.chooseDict = {}
 
 	def __repr__(self):
-		return "Bot #: %s" % self.id
+		return "[Bot] %s" % self.id
 
 	def __str__(self):
-		return "Bot - %s" % self.name
+		return "[Bot] %s" % self.name
 
 	def randomName(self):
 		fake = Faker()

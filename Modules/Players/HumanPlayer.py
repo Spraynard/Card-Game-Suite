@@ -2,11 +2,12 @@ import sys
 import random
 
 from .Player import Player
+from faker import Faker
 
 class HumanPlayer(Player):
 	"""Player object, All the commands that the player will use in the game are here."""
 	def __init__(self, name = None):
-		super(HumanPlayer, self).__init__()
+		super().__init__(name)
 
 		self.tricks = 0
 		# Internal Player's Responses to questions posed by engine
@@ -25,7 +26,6 @@ class HumanPlayer(Player):
 	def randomName(self):
 		# Returns a `Player` with a random name from the Faker lib
 		#	can get some pretty funny names :)
-		from faker import Faker
 		fake = Faker()
 
 		return HumanPlayer(fake.name())
@@ -34,13 +34,13 @@ class HumanPlayer(Player):
 		statementDict = {
 			1 : "\"I sure do not!\"",
 		}
-		print(statementDict[random.choice(statementDict.keys())])
+		print(statementDict[random.choice(list(statementDict.keys()))])
 
 	def defeatStatement(self):
 		statementDict = {
 			1 : "%s: \"I do have %s cards. Here they are\": %s",
 		}
-		print(statementDict[random.choice(statementDict.keys())] % (self.getName(), len(self.getGiveArray()), self.getGiveArray()))
+		print(statementDict[random.choice(list(statementDict.keys()))] % (self.getName(), len(self.getGiveArray()), self.getGiveArray()))
 
 	def askOtherPlayer(self):
 		statementDict = {
