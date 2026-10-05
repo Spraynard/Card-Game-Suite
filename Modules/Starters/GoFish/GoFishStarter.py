@@ -1,5 +1,5 @@
-#The Following code is a GoFish backend
-#Rules:
+# The Following code is a GoFish backend
+# Rules:
 # * Use 1 Deck of 52 Cards
 # * Players are dealt seven random cards
 
@@ -22,153 +22,164 @@ from Modules.Players.Bot import Bot
 from Modules.Engines.GoFish.GoFishEngine import GoFishEngine
 from faker import Faker
 
+
 class GoFishStarter:
-	def __init__(self, test = False):
-		self.players = []
-		self.engine = GoFishEngine()
-		self.test = test
-		self.maxHumanPlayers = 1
-		self.maxPlayers = 6
-		self.minPlayers = 4
-		self.minBots = 0
-		self.human_amount = 0
-		self.bot_amount = 0
-		# If there are human players in the game
-		self.humanPlayers = False
+    def __init__(self, test=False):
+        self.players = []
+        self.engine = GoFishEngine()
+        self.test = test
+        self.maxHumanPlayers = 1
+        self.maxPlayers = 6
+        self.minPlayers = 4
+        self.minBots = 0
+        self.human_amount = 0
+        self.bot_amount = 0
+        # If there are human players in the game
+        self.humanPlayers = False
 
-	def getIfHumanPlayers(self):
-		# Returns true if there are any human players in the game.
-		# 	False if not.
-		return self.humanPlayers
+    def getIfHumanPlayers(self):
+        # Returns true if there are any human players in the game.
+        # 	False if not.
+        return self.humanPlayers
 
-	def setHumanPlayers(self, flag: bool):
-		self.humanPlayers = flag
+    def setHumanPlayers(self, flag: bool):
+        self.humanPlayers = flag
 
-	def getPlayersNamesPrompt(self, player_n) -> int:
-		names = False
-		while not names and self.getIfHumanPlayers():
-			name_flag = str(input("Would you like to name yourselves (Y/N)?: ")).lower()
+    def getPlayersNamesPrompt(self, player_n) -> int:
+        names = False
+        while not names and self.getIfHumanPlayers():
+            name_flag = str(input("Would you like to name yourselves (Y/N)?: ")).lower()
 
-			names = []
-			if name_flag == 'y':
-				print("Okay, please input the names for each player: ")
-				for i in range(player_n):
-					i_name = input("Player #%s: " % (i + 1))
-					names.append(i_name)
+            names = []
+            if name_flag == "y":
+                print("Okay, please input the names for each player: ")
+                for i in range(player_n):
+                    i_name = input("Player #%s: " % (i + 1))
+                    names.append(i_name)
 
-					if (i == player_n - 1):
-						break
-			else:
-				return
+                    if i == player_n - 1:
+                        break
+            else:
+                return
 
+        return names
 
-		return names
+    def addPlayer(self, player):
+        self.players.append(player)
 
-	def addPlayer(self, player):
-		self.players.append(player)
+    def addAllPlayers(self, human_amount, bot_amount):
+        player_bucket = []
+        player_names = self.getPlayersNamesPrompt(human_amount)
 
-	def addAllPlayers(self, human_amount, bot_amount):
-		player_bucket = []
-		player_names = self.getPlayersNamesPrompt(human_amount)
+        for i in range(human_amount):
+            if player_names:
+                player_bucket.append(HumanPlayer(player_names[i]))
+            else:
+                player_bucket.append(HumanPlayer())
 
-		for i in range(human_amount):
-			if player_names:
-				player_bucket.append(HumanPlayer(player_names[i]))
-			else:
-				player_bucket.append(HumanPlayer())
+        for i in range(bot_amount):
+            fake = Faker()
+            bot = Bot(fake.name())
+            player_bucket.append(bot)
 
-		for i in range(bot_amount):
-			fake = Faker()
-			bot = Bot(fake.name())
-			player_bucket.append(bot)
+        if not self.test:
+            shuffle(player_bucket)
 
-		if not self.test:
-			shuffle(player_bucket)
+        for p in player_bucket:
+            self.addPlayer(p)
 
-		for p in player_bucket:
-			self.addPlayer(p)
+    def promptForBots(self):
+        # Asks the players how many bots people want in their game.
+        # 	Returns the number given.
+        bot_n = False
+        # The number to fill up the card table
+        try:
+            # The amount of bots that can be used to fill empty slots in this game
+            max_bots = self.maxPlayers - self.human_amount
+        except:
+            raise Exception("Error with getting the # of players")
+        if max_bots == 0:
+            return False
+        while True:
+            try:
+                input_bot_amount = int(
+                    input(f"Please enter the number of bots (Max: {max_bots}): ")
+                )
+            except:
+                print(
+                    "You entered something I can't understand, probably a non-numerical"
+                )
+                continue
 
-	def promptForBots(self):
-		# Asks the players how many bots people want in their game.
-		# 	Returns the number given.
-		bot_n = False
-		# The number to fill up the card table
-		try:
-			# The amount of bots that can be used to fill empty slots in this game
-			max_bots = self.maxPlayers - self.human_amount
-		except:
-			raise Exception("Error with getting the # of players")
-		if max_bots == 0:
-			return False
-		while True:
-			try:
-				input_bot_amount = int(input(f"Please enter the number of bots (Max: {max_bots}): "))
-			except:
-				print("You entered something I can't understand, probably a non-numerical")
-				continue
+            total_player_amount = input_bot_amount + self.human_amount
+            bare_min_player_amt = self.maxPlayers - self.human_amount - input_bot_amount
 
-			total_player_amount = input_bot_amount + self.human_amount
-			bare_min_player_amt = self.maxPlayers - self.human_amount - input_bot_amount
-			
-			if input_bot_amount > 0 and bare_min_player_amt > 0:
-				print(f"The amount you gave is less than {bare_min_player_amt}")
-				print("We're going to fill bots up to the amount of player slots you need...")
+            if input_bot_amount > 0 and bare_min_player_amt > 0:
+                print(f"The amount you gave is less than {bare_min_player_amt}")
+                print(
+                    "We're going to fill bots up to the amount of player slots you need..."
+                )
 
-				return bare_min_player_amt
+                return bare_min_player_amt
 
-			if input_bot_amount > max_bots:
-				print("You can't have more than %s bots right now" % max_bots)
-			else:
-				return input_bot_amount
-				
-	def promptForPlayers(self) -> int:
-		player_n = False
+            if input_bot_amount > max_bots:
+                print("You can't have more than %s bots right now" % max_bots)
+            else:
+                return input_bot_amount
 
-		while True:
-			human_player_amount_input = False
-			try:
-				human_player_amount_input = int(input(f"Please enter the number of human players (max: {self.maxHumanPlayers}): "))
-			except:
-				print(f"Nope need to enter a # between 0 and {self.maxHumanPlayers}")
-				continue
+    def promptForPlayers(self) -> int:
+        player_n = False
 
-			if human_player_amount_input == 0:
-				print("Haha, you're playing an all bot game. That's pretty nice!")
-				break
-			
-			if human_player_amount_input > self.maxHumanPlayers:
-				print(f"You can't have more than {self.maxHumanPlayers} players")
-			else:
-				player_n = human_player_amount_input
-				self.setHumanPlayers(True)
-				break
-		return player_n
+        while True:
+            human_player_amount_input = False
+            try:
+                human_player_amount_input = int(
+                    input(
+                        f"Please enter the number of human players (max: {self.maxHumanPlayers}): "
+                    )
+                )
+            except:
+                print(f"Nope need to enter a # between 0 and {self.maxHumanPlayers}")
+                continue
 
-	def handlePlayerInit(self):
-		pass
+            if human_player_amount_input == 0:
+                print("Haha, you're playing an all bot game. That's pretty nice!")
+                break
 
-	def startGame(self):
-		self.engine.setPlayers(self.players)
-		self.engine.initialize()
+            if human_player_amount_input > self.maxHumanPlayers:
+                print(f"You can't have more than {self.maxHumanPlayers} players")
+            else:
+                player_n = human_player_amount_input
+                self.setHumanPlayers(True)
+                break
+        return player_n
 
-	def initializeGoFish(self):
-		if self.test:
-			print("This is now in test mode")
-			sleep(2)
-		print("Welcome to another round of the famous game, Go Fish!")
-				# Returns: Void
-		try:
-			self.human_amount = self.promptForPlayers()
-		except Exception as e:
-			raise Exception(f"There is a problem in `handlePlayerInit()` - {e}")
+    def handlePlayerInit(self):
+        pass
 
-		try:
-			self.bot_amount = self.promptForBots()
-		except:
-			raise Exception(f"There was an error initializing the bots - {e}")
+    def startGame(self):
+        self.engine.setPlayers(self.players)
+        self.engine.initialize()
 
-		self.addAllPlayers(self.human_amount, self.bot_amount)
-		self.startGame()
+    def initializeGoFish(self):
+        if self.test:
+            print("This is now in test mode")
+            sleep(2)
+        print("Welcome to another round of the famous game, Go Fish!")
+        # Returns: Void
+        try:
+            self.human_amount = self.promptForPlayers()
+        except Exception as e:
+            raise Exception(f"There is a problem in `handlePlayerInit()` - {e}")
+
+        try:
+            self.bot_amount = self.promptForBots()
+        except:
+            raise Exception(f"There was an error initializing the bots - {e}")
+
+        self.addAllPlayers(self.human_amount, self.bot_amount)
+        self.startGame()
+
 
 if __name__ == "__main__":
-	GoFishStarter().initializeGoFish()
+    GoFishStarter().initializeGoFish()

@@ -1,9 +1,9 @@
 class Menu(object):
-	def _populateGameList(self):
-		pass
+    def _populateGameList(self):
+        pass
 
-	def chooseGame(self):
-		pass
+    def chooseGame(self):
+        pass
 
-	def start(self):
-		pass
+    def start(self):
+        pass

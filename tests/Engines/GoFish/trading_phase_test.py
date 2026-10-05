@@ -1,165 +1,185 @@
 import sys
 import unittest
 
-sys.path.append('../../../')
-
-from Modules.Players.GoFish.Bot import Bot
-from Modules.Players.GoFish.HumanPlayer import HumanPlayer
+from Modules.Players.Bot import Bot
+from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Cards.Card import Card
-from Modules.Engines.GoFish.TestGoFishEngine import TestGoFishEngine
+from Modules.Cards.Deck import Deck
+from Modules.Engines.GoFish.DebugGoFishEngine import DebugGoFishEngine
+
+import pytest
+
+@pytest.fixture
+def human_player():
+    return HumanPlayer()
+
+@pytest.fixture
+def bot_player():
+    return Bot()
+
+@pytest.fixture
+def engine():
+    return DebugGoFishEngine(True)
 
 # Lets ask what the trading phase should do?:
 # 	1. Based on the player and card selected from the decision phase, you should
 #
 
+
 def checkStringForBullshit(string):
-	string = string.split(" ")
-	for w in string:
-		if w == "False":
-			return True
-	return False
+    string = string.split(" ")
+    for w in string:
+        if w == "False":
+            return True
+    return False
 
-class TradingPhaseEngineTests(unittest.TestCase):
-	
-	def setUp(self):
-		self.humanPlayer = HumanPlayer().randomName()
-		self.botPlayer = Bot()
-		self.engine = TestGoFishEngine(True)
 
-	def test_trading_phase_accept_single_card(self):
-# Steps:
-# 1. Player initialization 
-# 	a. Set Chosen Player
-#	b. Set Chosen Card
-# 	c. Initialize Chosen Player's hand with chosen card
-# 	d. run tests
+class TestTradingPhase():
+    def test_trading_phase_accept_single_card(self, human_player, bot_player, engine):
+        # Steps:
+        # 1. Player initialization
+        # 	a. Set Chosen Player
+        # 	b. Set Chosen Card
+        # 	c. Initialize Chosen Player's hand with chosen card
+        # 	d. run tests
 
-		# The ole 5 of clubs :)
+        # The ole 5 of clubs :)
 
-		ask_card = Card(5, "Clubs")
-		self.humanPlayer.setChosenPlayer(self.botPlayer)
-		self.humanPlayer.setChosenCard(ask_card)
-		self.botPlayer.hand.append(ask_card)
-		self.engine.tradingPhase(self.humanPlayer)
+        ask_card = Card(5, "Clubs")
+        human_player.setChosenPlayer(bot_player)
+        human_player.setChosenCard(ask_card)
+        bot_player.hand.append(ask_card)
+        engine.tradingPhase(human_player)
 
-		output = sys.stdout.getvalue().strip()
-		split_output = output.split('\n')
-		output1 = split_output[0]
-		output2 = split_output[1]
+        output = sys.stdout.getvalue().strip()
+        split_output = output.split("\n")
+        output1 = split_output[0]
+        output2 = split_output[1]
 
-		acceptOutput1 = "%s: \"Hey %s, Do you have any %ss?\"" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank())
-		self.assertTrue(output1 == acceptOutput1, "Your output is not the same as what I am expecting\
+        acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
+            human_player.getName(),
+            bot_player,
+            ask_card.getRank(),
+        )
+        assert output1 == acceptOutput1,"Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
-												Chosen Card: %s" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank()))
-		
-		self.assertFalse(checkStringForBullshit(output2), "You got some bullshit in your output 2")
-		self.assertTrue(len(self.botPlayer.getGiveArray()) == 0, "Bot Player's Give Array: %s" % self.botPlayer.getGiveArray())
-		self.assertTrue(len(self.botPlayer.getHand()) == 0, "Bot Player's Hand %s" % self.botPlayer.showHand())
+												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
 
-		self.assertFalse(len(self.humanPlayer.getHand()) == 0, "Human Player's hand %s" % self.humanPlayer.showHand())
-	
-	def test_trading_phase_accept_multiple_cards(self):
-		# The chosen player should have multiple of the `same` card.
-		# 	I do not expect this to work right off the bat, but you know.
-		ask_card = Card(5, "Hearts")
-		bot_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
-		self.botPlayer.takeRelevantCards(bot_card_array)
+        assert checkStringForBullshit(output2) == False, "You got some bullshit in your output 2"
+        assert len(bot_player.getGiveArray()) == 0, "Bot Player's Give Array: %s" % bot_player.getGiveArray()
+        assert len(bot_player.getHand()) == 0, "Bot Player's Hand %s" % bot_player.showHand()
 
-		self.humanPlayer.setChosenPlayer(self.botPlayer)
-		self.humanPlayer.setChosenCard(ask_card)
-		self.engine.tradingPhase(self.humanPlayer)
+        assert len(human_player.getHand()) != 0, "Human Player's hand %s" % human_player.showHand()
 
-		output = sys.stdout.getvalue().strip()
-		split_output = output.split('\n')
-		output1 = split_output[0]
-		output2 = split_output[1]
+    def test_trading_phase_accept_multiple_cards(self, human_player, bot_player, engine):
+        # The chosen player should have multiple of the `same` card.
+        # 	I do not expect this to work right off the bat, but you know.
+        ask_card = Card(5, "Hearts")
+        bot_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
+        bot_player.takeRelevantCards(bot_card_array)
 
-		acceptOutput1 = "%s: \"Hey %s, Do you have any %ss?\"" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank())
-		self.assertTrue(output1 == acceptOutput1, "Your output is not the same as what I am expecting\
+        human_player.setChosenPlayer(bot_player)
+        human_player.setChosenCard(ask_card)
+        engine.tradingPhase(human_player)
+
+        output = sys.stdout.getvalue().strip()
+        split_output = output.split("\n")
+        output1 = split_output[0]
+        output2 = split_output[1]
+
+        acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
+            human_player.getName(),
+            bot_player,
+            ask_card.getRank(),
+        )
+        assert output1 == acceptOutput1,"Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
-												Chosen Card: %s" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank()))
-		
-		self.assertTrue(len(self.botPlayer.getGiveArray()) == 0, "Bot Player's Give Array: %s" % self.botPlayer.getGiveArray())
-		self.assertTrue(self.botPlayer.handCount() == 0, "Bot Player's Hand %s" % self.botPlayer.showHand())
-		
-		self.assertFalse(self.humanPlayer.handCount() == 0, "Human Player's hand is not empty, as it should be")
+												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
 
-	def test_trading_phase_reject_no_cards(self):
-		# Player should draw a card from the deck after this.
-		# 	Don't forget to load up the engine with a deck.
-		self.engine.setDeck()
+        assert len(bot_player.getGiveArray()) == 0, "Bot Player's Give Array: %s" % bot_player.getGiveArray()
+        assert bot_player.handCount() == 0, "Bot Player's Hand %s" % bot_player.showHand()
 
-		ask_card = Card(10, "Clubs")
-		bot_hand_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
-		self.botPlayer.takeRelevantCards(bot_hand_card_array)
+        assert human_player.handCount() != 0, "Human Player's hand is not empty, as it should be"
 
-		self.humanPlayer.setChosenPlayer(self.botPlayer)
-		self.humanPlayer.setChosenCard(ask_card)
+    def test_trading_phase_reject_no_cards(self, human_player, bot_player, engine):
+        # Player should draw a card from the deck after this.
+        # 	Don't forget to load up the engine with a deck.
+        engine.setDeck()
 
-		self.assertTrue(self.humanPlayer.handCount() == 0)
+        ask_card = Card(10, "Clubs")
+        bot_hand_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
+        bot_player.takeRelevantCards(bot_hand_card_array)
 
-		self.engine.tradingPhase(self.humanPlayer)
+        human_player.setChosenPlayer(bot_player)
+        human_player.setChosenCard(ask_card)
 
-		output = sys.stdout.getvalue().strip()
-		split_output = output.split('\n')
-		output1 = split_output[0]
-		output2 = split_output[1]
+        assert human_player.handCount() == 0
 
-		acceptOutput1 = "%s: \"Hey %s, Do you have any %ss?\"" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank())
-		self.assertTrue(output1 == acceptOutput1, "Your output is not the same as what I am expecting\
+        engine.tradingPhase(human_player)
+
+        output = sys.stdout.getvalue().strip()
+        split_output = output.split("\n")
+        output1 = split_output[0]
+        output2 = split_output[1]
+
+        acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
+            human_player.getName(),
+            bot_player,
+            ask_card.getRank(),
+        )
+        assert output1 == acceptOutput1,"Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
-												Chosen Card: %s" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank()))
+												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
+        
 
-		self.assertTrue(self.humanPlayer.handCount() == 1)
-		self.assertTrue(self.botPlayer.handCount() == 3)
+        assert human_player.handCount() == 1
+        assert bot_player.handCount() == 3
 
-	def test_trading_phase_reject_player_loss(self):
-		from Modules.Cards.Deck import Deck
+    def test_trading_phase_reject_player_loss(self, human_player, bot_player, engine):
 
-		self.engine.deck = Deck()
-		self.engine.setPlayers([self.humanPlayer, self.botPlayer])
+        engine.deck = Deck()
+        engine.setPlayers([human_player, bot_player])
 
-		self.assertTrue(self.humanPlayer in self.engine.getPlayers())
-		
-		ask_card = Card(10, "Clubs")
+        assert human_player in engine.getPlayers()
 
-		bot_hand_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
+        ask_card = Card(10, "Clubs")
 
-		self.botPlayer.takeRelevantCards(bot_hand_card_array)
+        bot_hand_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
 
-		self.humanPlayer.setChosenPlayer(self.botPlayer)
+        bot_player.takeRelevantCards(bot_hand_card_array)
 
-		self.humanPlayer.setChosenCard(ask_card)
+        human_player.setChosenPlayer(bot_player)
 
-		self.assertTrue(self.humanPlayer.handCount() == 0)
+        human_player.setChosenCard(ask_card)
 
-		self.engine.tradingPhase(self.humanPlayer)
+        assert human_player.handCount() == 0
 
-		output = sys.stdout.getvalue().strip()
-		split_output = output.split('\n')
-		
-		output1 = split_output[0]
-		output2 = split_output[1]
-		output3 = split_output[2]
+        engine.tradingPhase(human_player)
 
-		acceptOutput1 = "%s: \"Hey %s, Do you have any %ss?\"" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank())
-		self.assertTrue(output1 == acceptOutput1, "Your output is not the same as what I am expecting\
+        output = sys.stdout.getvalue().strip()
+        split_output = output.split("\n")
+
+        output1 = split_output[0]
+        output2 = split_output[1]
+        output3 = split_output[2]
+
+        acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
+            human_player.getName(),
+            bot_player,
+            ask_card.getRank(),
+        )
+        assert output1 == acceptOutput1, "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
-												Chosen Card: %s" % (self.humanPlayer.getName(), self.botPlayer, ask_card.getRank()))
+												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
 
-		acceptOutput3 = "Hey everyone, laugh at %s! They got kicked out of the game for losing!" % self.humanPlayer
-		self.assertTrue(output3 == acceptOutput3)
+        acceptOutput3 = (
+            "Hey everyone, laugh at %s! They got kicked out of the game for losing!"
+            % human_player
+        )
+        assert output3 == acceptOutput3
 
-		self.assertTrue(not self.humanPlayer in self.engine.getPlayers())
-
-	def tearDown(self):
-		self.humanPlayer = None
-		self.botPlayer = None
-		self.engine = None
-		
-if __name__ == '__main__':
-	unittest.main(verbosity = 2, buffer = True)
+        assert not human_player in engine.getPlayers()

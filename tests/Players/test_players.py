@@ -1,100 +1,70 @@
 import os
 import sys
-
-import unittest
-
-sys.path.append('../../')
+import inspect
 
 from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Players.Bot import Bot
 
 from Modules.Cards.Deck import Deck
+class TestPlayer():
+    def test_player_1_is_not_bot(self):
+        player_1 = HumanPlayer
+        player_2 = Bot
 
-class PlayerTests(unittest.TestCase):
+        assert not isinstance(player_1, player_2)
 
-	def setUp(self):
-		self.player_1 = False
-		self.player_2 = False
-		self.deck = False
+    def test_two_diff_not_equal(self):
+        player_1 = HumanPlayer("Jeffery")
+        player_2 = HumanPlayer("Robert")
+        assert player_1 !=  player_2
 
-	def test_human_player_is_not_bot(self):
-		import inspect
-		self.player_1 = HumanPlayer
-		self.player_2 = Bot
+    def test_two_diff_same_name_not_equal(self):
+        player_1 = HumanPlayer("Jeffery")
+        player_2 = HumanPlayer("Jeffery")
+        assert player_1 != player_2
 
-		self.assertTrue(inspect.isclass(self.player_1))
-		self.assertTrue(inspect.isclass(self.player_2))
-		self.assertFalse(isinstance(self.player_1, self.player_2))
+    def test_draw_hand(self):
+        deck = Deck()
+        deck.initialize()
 
-	def test_two_diff_not_equal(self):
-		self.player_1 = HumanPlayer("Jeffery")
-		self.player_2 = HumanPlayer("Robert")
-		self.assertNotEqual(self.player_1, self.player_2)
+        player_1 = HumanPlayer()
 
-	def test_two_diff_same_name_not_equal(self):
-		self.player_1 = HumanPlayer("Jeffery")
-		self.player_2 = HumanPlayer("Jeffery")
-		self.assertNotEqual(self.player_1, self.player_2)
+        # Make sure the deck is 52 cards (one full deck)
+        assert deck.currentAmount() == 52
 
-	def test_draw_hand(self):
-		self.deck = Deck()
-		self.deck.initialize()
+        # Player draws a full seven card hand from the deck
+        player_1.drawCards(deck, 7)
 
-		self.player_1 = HumanPlayer()
+        # Make sure after drawing that the deck takes 7
+        # 	cards away from its full total
+        assert deck.currentAmount() == 45
 
-		# Make sure the deck is 52 cards (one full deck)
-		self.assertIs(self.deck.currentAmount(), 52)
+        # Assert that the player actually has a hand
+        assert player_1.handCount() > 0
 
-		# Player draws a full seven card hand from the deck
-		self.player_1.drawCards(self.deck, 7)
+        # At least for Go Fish, the hand should be 7
+        # 	cards big when the player is starting out
+        assert player_1.handCount() == 7
 
-		# Make sure after drawing that the deck takes 7
-		# 	cards away from its full total
-		self.assertIs(self.deck.currentAmount(), 45)
+class TestBot():
+    def test_if_player_class(self):
+        player_1 = HumanPlayer
+        player_2 = Bot()
 
-		# Assert that the player actually has a hand
-		self.assertGreater(self.player_1.handCount(), 0)
+        assert isinstance(player_2, player_1)
 
-		# At least for Go Fish, the hand should be 7
-		# 	cards big when the player is starting out
-		self.assertIs(self.player_1.handCount(), 7)
+    def test_type_difference(self):
+        player_1 = HumanPlayer()
+        player_2 = Bot()
 
-	def tearDown(self):
-		self.player_1 = False
-		self.player_2 = False
-		self.deck = False
+        assert type(player_2) != "HumanPlayer.HumanPlayer","Player 1 type %s, Player 2 type %s"
 
-class BotTests(unittest.TestCase):
-	def setUp(self):
-		self.player_1 = False
-		self.player_2 = False
+    def test_two_diff_not_equal(self):
+        player_1 = Bot("Jeffery")
+        player_2 = Bot("Robert")
+        assert player_1 != player_2
 
-	def test_if_player_class(self):
-		self.player_1 = HumanPlayer
-		self.player_2 = Bot()
-
-		self.assertTrue(isinstance(self.player_2, self.player_1))
-
-	def test_type_difference(self):
-		self.player_1 = HumanPlayer()
-		self.player_2 = Bot()
-
-		self.assertFalse(type(self.player_2) == 'HumanPlayer.HumanPlayer',
-			"Player 1 type %s, Player 2 type %s")
-
-	def test_two_diff_not_equal(self):
-		self.player_1 = Bot("Jeffery")
-		self.player_2 = Bot("Robert")
-		self.assertNotEqual(self.player_1, self.player_2)
-
-	def test_two_diff_same_name_not_equal(self):
-		self.player_1 = Bot("Jeffery")
-		self.player_2 = Bot("Jeffery")
-		self.assertNotEqual(self.player_1, self.player_2)
-
-	def tearDown(self):
-		self.player_1 = False
-		self.player_2 = False
-
-if __name__ == '__main__':
-	unittest.main(verbosity=2)
+    def test_two_diff_same_name_not_equal(self):
+        player_1 = Bot("Jeffery")
+        player_2 = Bot("Jeffery")
+        assert player_1 != player_2
