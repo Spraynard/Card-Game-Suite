@@ -59,7 +59,7 @@ class Engine():
         else:
             self.playerIndex += 1
 
-    def getCurrentPlayer(self):
+    def get_current_player(self):
         return self.getPlayers()[self._getPlayerIndex()]
 
     def returnWinningPlayer(self):
@@ -121,16 +121,6 @@ class Engine():
             """Congratulations %s, you have won the epic game of Go Fish with a trick count of %s. Make sure to tell all of your other friends (if you have any) that you won one of the most childish games in all the land!"""
             % (winning_players, winning_trick_amount)
         )
-
-    def playerAskLoop(self, choiceListLength):
-        choice = None
-        while True:
-            choice = int(input("Please enter your choice: ")) - 1
-            if (choice < 0) or (choice >= choiceListLength):
-                print("\nError: That is not one of the player choices")
-            else:
-                break
-        return choice
 
     def deal_hands(self):
         deck = self.getDeck()

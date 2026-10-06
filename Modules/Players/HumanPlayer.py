@@ -25,7 +25,7 @@ class HumanPlayer(Player):
     # |-------------Talking (Printed Statements)-----------------------------|
     # These statements will be used during the trading phase. Something to look at to
     # 	expand, definitely.
-    def randomName(self):
+    def random_name(self):
         # Returns a `Player` with a random name from the Faker lib
         # 	can get some pretty funny names :)
         fake = Faker()
@@ -95,7 +95,7 @@ class HumanPlayer(Player):
     def getChosenCard(self):
         return self.chosenCard
 
-    def setChosenCard(self, card):
+    def set_chosen_card(self, card):
         self.chosenCard = card
 
     def resetChosenVariables(self):

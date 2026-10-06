@@ -1,10 +1,6 @@
 import random
 import uuid
-import sys
 
-sys.path.append("../")
-
-# from Modules.Debug.TermColor import *
 from Modules.Cards.Card import Card
 from Modules.Cards.Deck import Deck
 from faker import Faker
@@ -35,7 +31,7 @@ class Player(object):
         else:
             return "Player"
 
-    def randomName(self):
+    def random_name(self):
         # Returns a `Player` with a random name from the Faker lib
         # 	can get some pretty funny names :)
         fake = Faker()

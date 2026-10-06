@@ -31,9 +31,9 @@ def spawnExtraPlayers(playerType, amount, names=None):
     else:
         # Spawn humans
         if amount == 1:
-            return HumanPlayer().randomName()
+            return HumanPlayer().random_name()
         else:
-            return [HumanPlayer().randomName() for i in range(amount)]
+            return [HumanPlayer().random_name() for i in range(amount)]
 
 
 class TestDecisionPhaseEngine:

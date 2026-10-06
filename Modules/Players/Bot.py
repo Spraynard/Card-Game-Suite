@@ -1,12 +1,6 @@
-import sys
-import time
-
-sys.path.append("../")
-
 from .HumanPlayer import HumanPlayer
+from Modules.Cards.Card import Card
 from faker import Faker
-# from MModules import Card
-
 
 class Bot(HumanPlayer):
     """Bot object, which is a player. There are taunts available to bots to rouse up the player whenver they make a mistake"""
@@ -37,11 +31,11 @@ class Bot(HumanPlayer):
     def __str__(self):
         return "[Bot] %s" % self.name
 
-    def randomName(self):
+    def random_name(self):
         fake = Faker()
         return Bot(fake.name())
 
-    def tauntPlayer(self):
+    def taunt_player(self):
         import random
 
         return (
@@ -51,12 +45,12 @@ class Bot(HumanPlayer):
         )
 
     # Hand Evaluation Functionality
-    def _assembleChooseDict(self):
+    def _assemble_choose_dict(self):
         hand = self.getHand()
         for c in hand:
             self._addChooseDict(c)
 
-    def _analyzeChooseDict(self):
+    def _analyze_choose_dict(self):
         # Haha, this is laughably bad AI for the bots.
         # 	Might as well have a random card generator for now
         maxCount = None
@@ -70,18 +64,18 @@ class Bot(HumanPlayer):
                 maxCount = currentLength
                 rankMax = k
 
-        self.setChosenCard(Card(rankMax))
+        self.set_chosen_card(Card(rankMax))
 
-    def _randomChoice(self):
+    def _random_choice(self):
         import random
 
         hand = self.getHand()
 
         if len(hand) == 0:
             chooseableCards = Card().acceptDict["ranks"]
-            self.setChosenCard(Card(random.choice(chooseableCards)))
+            self.set_chosen_card(Card(random.choice(chooseableCards)))
         else:
-            self.setChosenCard(random.choice(hand))
+            self.set_chosen_card(random.choice(hand))
 
     # chooseDict Functionality
     def _getChooseDict(self):
@@ -101,11 +95,11 @@ class Bot(HumanPlayer):
     def _resetChooseDict(self):
         self.chooseDict = {}
 
-    def chooseCard(self):
+    def choose_card(self):
         # Implement Bot Card Choosing. Game will not work without this. What I eventually want to to is
         #  1. Bot looks through hand for cards they have
         #  2. Of cards that bot has, look for the rank in which you have the most of.
         #  2a. If you have multiple ranks with the same amount, break by choosing randomly
-        self._assembleChooseDict()
+        self._assemble_choose_dict()
         # self._analyzeChooseDict()
-        self._randomChoice()
+        self._random_choice()

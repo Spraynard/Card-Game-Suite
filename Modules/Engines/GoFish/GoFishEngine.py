@@ -25,7 +25,7 @@ class GoFishEngine(Engine):
         # Add the amount referenced in the amount param to the total trick count
         self.trick_count += amount
 
-    def displayCurrentPlayerInfo(self, player):
+    def display_current_player_info(self, player):
         # Give
         if isinstance(player, Bot):
             # No need to display if
@@ -143,7 +143,7 @@ class GoFishEngine(Engine):
                 # If the other player is a bot, they will taunt you
                 # 	and probably make you really sad af.
                 bot = chosenPlayer
-                print(bot.tauntPlayer())
+                print(bot.taunt_player())
             else:
                 chosenPlayer.talk("victory")
 
@@ -152,17 +152,17 @@ class GoFishEngine(Engine):
     # End Game Action Functionality
     def game_start_deal_number_of_cards(self):
         # Three Players or more
-        return  5 if len(players) > 3 else 7
+        return  5 if len(self.players) > 3 else 7
 
     # Game Phases Here
-    def initialPhase(self, player):
-        self.displayCurrentPlayerInfo(player)
+    def initial_phase(self, player):
+        self.display_current_player_info(player)
 
-    def decisionPhase(self, player):
+    def decision_phase(self, player):
         self.choose_player_to_ask(player)
         self.choose_card(player)
 
-    def tradingPhase(self, player: Player):
+    def trading_phase(self, player: Player):
         chosenCard = self.askForCardRank(player)
         # Player state is valuable after they ask for card.
         deck = self.getDeck()
@@ -185,7 +185,7 @@ class GoFishEngine(Engine):
     def winConditionsMet(self):
         return self.getMasterTrickCount() == 13
 
-    def endPhase(self, player):
+    def end_phase(self, player):
         player.sortHand()
         player.lookForTricks()
         tricks_added = player.setTricks()
@@ -219,8 +219,8 @@ class GoFishEngine(Engine):
         # 	END PHASE
         # 	- Scan hand to see if there are any tricks available
         # 	- If four tricks, player wins
-        player = self.getCurrentPlayer()
-        self.initialPhase(player)
-        self.decisionPhase(player)
-        self.tradingPhase(player)
-        self.endPhase(player)
+        player = self.get_current_player()
+        self.initial_phase(player)
+        self.decision_phase(player)
+        self.trading_phase(player)
+        self.end_phase(player)
