@@ -1,5 +1,6 @@
-import sys
 import random
+
+from Modules.Cards import Card
 
 from .Player import Player
 from faker import Faker
@@ -194,14 +195,13 @@ class HumanPlayer(Player):
 
     def populate_sorting_dict(self):
         sorting_dict = self.get_sorting_dict()
-        hand = self.get_hand()
         if self.hand_count() == 0:
             return
-        for c in self.get_hand():
-            card_rank = c.get_rank()
+        for card in self.get_hand():
+            card_rank = card.get_rank()
             if not card_rank in sorting_dict:
                 sorting_dict[card_rank] = []
-            sorting_dict[card_rank].append(c)
+            sorting_dict[card_rank].append(card)
 
     def format_cards_by_sorting_dict(self):
         s_d = self.get_sorting_dict()
@@ -266,11 +266,11 @@ class HumanPlayer(Player):
 
         # Player => Player Card Interaction
 
-    def give_to_player(self, other):
-        other.takeRelevantCards(self.get_give_array())
+    def give_to_player(self, other: Player) -> None:
+        other.take_relevant_cards(self.get_give_array())
         self.reset_give_array()
 
-    def concede_defeat(self, chosen_card):
+    def concede_defeat(self, chosen_card: Card) -> None:
         self.populate_give_array(chosen_card)
 
         # End TRADING PHASE operation code

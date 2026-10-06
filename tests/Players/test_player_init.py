@@ -14,7 +14,7 @@ class TestPlayerInit:
         f1 = sys.stdin
         f = open("tests/test_data/single_player_name.txt", "r")
         sys.stdin = f
-        starter.initializeGoFish()
+        starter.initialize_go_fish()
         f.close()
         sys.stdin = f1
 

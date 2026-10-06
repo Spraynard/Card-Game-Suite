@@ -159,10 +159,10 @@ class GoFishStarter:
         pass
 
     def start_game(self):
-        self.engine.setPlayers(self.players)
+        self.engine.set_players(self.players)
         self.engine.initialize()
 
-    def initializeGoFish(self):
+    def initialize_go_fish(self):
         if self.test:
             print("This is now in test mode")
             sleep(2)
@@ -183,4 +183,4 @@ class GoFishStarter:
 
 
 if __name__ == "__main__":
-    GoFishStarter().initializeGoFish()
+    GoFishStarter().initialize_go_fish()

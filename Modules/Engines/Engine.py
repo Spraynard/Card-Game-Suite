@@ -1,6 +1,7 @@
 from Modules.Cards.Deck import Deck
 from Modules.Cards.Card import Card
 from Modules.Players.HumanPlayer import HumanPlayer
+from Modules.Players.Player import Player
 
 
 class Engine:
@@ -30,10 +31,10 @@ class Engine:
 
         # All Engines will handle getting and setting current players with this functionality
 
-    def get_players(self):
+    def get_players(self) -> list[Player]:
         return self.players
 
-    def get_player_amount(self):
+    def get_player_amount(self) -> int:
         return len(self.players)
 
     def set_players(self, players):
@@ -50,32 +51,32 @@ class Engine:
             print("%s: %s" % (p, player.getHand()))
             # End Player Handling Functionality
 
-    def _getPlayerIndex(self):
+    def _get_player_index(self):
         return self.player_index
 
-    def _addPlayerIndex(self):
+    def _add_player_index(self):
         players = self.get_players()
 
-        if (self._getPlayerIndex() + 1) == len(players):
+        if (self._get_player_index() + 1) == len(players):
             self.player_index = 0
         else:
             self.player_index += 1
 
     def get_current_player(self):
-        return self.get_players()[self._getPlayerIndex()]
+        return self.get_players()[self._get_player_index()]
 
     def return_winning_player(self):
-        p_l = self.get_players()
+        player_list = self.get_players()
         max_tricks = 0
         max_player_array = None
-        for p in p_l:
-            player_score = p.get_tricks()
+        for player in player_list:
+            player_score = player.get_tricks()
             if max_tricks == player_score and (not player_score == 0):
-                max_player_array.append(p)
+                max_player_array.append(player)
             elif max_tricks < player_score:
                 max_tricks = player_score
                 max_player_array = []
-                max_player_array.append(p)
+                max_player_array.append(player)
         if len(max_player_array) == 1:
             return max_player_array[0]
         else:
@@ -83,7 +84,7 @@ class Engine:
 
             # All Engines will have a game loop. Unsure if it will be set this way throughout
 
-    def game_loop(self):
+    def game_loop(self) -> None:
         # Will stop when there is a player that has gotten the winning conditions of the game
         while not self.game_over():
             # Getting the current player for the turn
@@ -116,7 +117,7 @@ class Engine:
                     winning_players += player_obj[i]
                     winning_trick_amount = player_obj[i].get_tricks()
                 else:
-                    winning_players += playerobj[i] + ", "
+                    winning_players += player_obj[i] + ", "
         else:
             raise Exception(
                 "What the hell are you putting in here, man? That ain't cool."
@@ -132,13 +133,13 @@ class Engine:
         players = self.get_players()
 
         for p in players:
-            p.drawCards(deck, self.game_start_deal_number_of_cards())
+            p.draw_cards(deck, self.game_start_deal_number_of_cards())
 
     def game_start_deal_number_of_cards(self):
         """Obtain the amount of cards each player should start with at the start of the game."""
         raise Exception("game_start_deal_number_of_cards not implemented")
 
-    def game_start(self):
+    def game_start(self) -> None:
         """
         Start the game
         """

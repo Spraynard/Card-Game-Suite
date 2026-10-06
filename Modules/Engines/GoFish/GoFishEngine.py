@@ -1,5 +1,6 @@
 from Modules.Cards.Card import Card
 from Modules.Engines.Engine import Engine
+from Modules.Players import HumanPlayer
 from Modules.Players.Bot import Bot
 from Modules.Players.Player import Player
 from Modules.Views.TerminalOutput import TerminalOutput
@@ -21,17 +22,17 @@ class GoFishEngine(Engine):
         # Return Engine's total trick count
         return self.trick_count
 
-    def addMasterTrickCount(self, amount):
+    def add_master_trick_count(self, amount):
         # Add the amount referenced in the amount param to the total trick count
         self.trick_count += amount
 
-    def display_current_player_info(self, player):
+    def display_current_player_info(self, player: HumanPlayer):
         # Give
         if isinstance(player, Bot):
             # No need to display if
             # 	the player is a bot
             return
-        player.displayTricks()
+        player.display_tricks()
         TerminalOutput.hand(player)
 
     def player_ask_loop(self, choice_list_length):
@@ -49,7 +50,7 @@ class GoFishEngine(Engine):
         # Summary: Instructs the player to choose another player to ask for a card. This code also handles bots.
         # Input: `Player` - A player object
         # Returns: Void
-        choice_list = list(self.getPlayers())
+        choice_list = list(self.get_players())
         choice_list.remove(player)
         choice = False
 
@@ -113,41 +114,39 @@ class GoFishEngine(Engine):
             # 		else:
             # 			break
 
-    def askForCardRank(self, player):
+    def ask_for_card_rank(self, player: HumanPlayer) -> Card:
         """
         Summary: Once the player chooses a card rank and another player to ask,
                        those values are stored in the player object and extracted in other code later on.
         Input: `player` - a player object, can be a humanplayer or a bot
         """
-        chosenPlayerGiveArray = False
-
-        chosenPlayer = player.getChosenPlayer()
-        chosenCard = player.getChosenCard()
+        chosen_player = player.get_chosen_player()
+        chosen_card = player.get_chosen_card()
 
         player.talk("ask")
 
-        if chosenPlayer.hasCard(chosenCard):
+        if chosen_player.has_card(chosen_card):
             # Count how many cards there are of that cardRank in the player's hand
             # 	give feedback based on the amount of cards.
-            player.guessedCorrectly()
-            chosenPlayer.concedeDefeat(chosenCard)
-            if isinstance(chosenPlayer, Bot):
-                bot = chosenPlayer
+            player.guessed_correctly()
+            chosen_player.concede_defeat(chosen_card)
+            if isinstance(chosen_player, Bot):
+                bot = chosen_player
                 bot.talk("exclaim")
             else:
-                chosenPlayer.talk("defeat")
+                chosen_player.talk("defeat")
             # cardsToChangePlayers = chosenPlayer.
-            chosenPlayer.giveToPlayer(player)
+            chosen_player.give_to_player(player)
         else:
-            if isinstance(chosenPlayer, Bot):
+            if isinstance(chosen_player, Bot):
                 # If the other player is a bot, they will taunt you
                 # 	and probably make you really sad af.
-                bot = chosenPlayer
+                bot = chosen_player
                 print(bot.taunt_player())
             else:
-                chosenPlayer.talk("victory")
+                chosen_player.talk("victory")
 
-        return chosenCard
+        return chosen_card
 
     # End Game Action Functionality
     def game_start_deal_number_of_cards(self):
@@ -163,50 +162,50 @@ class GoFishEngine(Engine):
         self.choose_card(player)
 
     def trading_phase(self, player: Player):
-        chosenCard = self.askForCardRank(player)
+        chosen_card = self.ask_for_card_rank(player)
         # Player state is valuable after they ask for card.
-        deck = self.getDeck()
+        deck = self.get_deck()
 
-        if not player.gotGuess():
-            if (player.hand_count() == 0) and (deck.currentAmount() == 0):
+        if not player.got_guess():
+            if (player.hand_count() == 0) and (deck.current_amount() == 0):
                 print(
                     "Hey everyone, laugh at %s! They got kicked out of the game for losing!"
                     % player
                 )
                 self.removePlayer(player)
             else:
-                drawnCard = player.draw_card(deck)
+                drawn_card = player.draw_card(deck)
 
-                if drawnCard == chosenCard:
-                    self.takeTurn()
+                if drawn_card == chosen_card:
+                    self.take_turn()
 
-        player.resetChosenVariables()
+        player.reset_chosen_variables()
 
-    def winConditionsMet(self):
+    def win_conditions_met(self):
         return self.getMasterTrickCount() == 13
 
-    def end_phase(self, player):
-        player.sortHand()
-        player.lookForTricks()
-        tricks_added = player.setTricks()
-        self.addMasterTrickCount(tricks_added)
+    def end_phase(self, player: Player):
+        player.sort_hand()
+        player.look_for_tricks()
+        tricks_added = player.set_tricks()
+        self.add_master_trick_count(tricks_added)
 
-        if player.gotGuess():
+        if player.got_guess():
             # If the player has a good guess (e.g. they asked another player for a card that they
             # 	had in their hand and they actually had one or more of those cards in their hand)
 
             # Resetting the player's guess for next turn :)
-            player.resetGuess()
-            self.takeTurn()
+            player.reset_guess()
+            self.take_turn()
         else:
             # If the player had to draw from the pile because they guessed badly.
-            self._addPlayerIndex()
+            self._add_player_index()
 
-        if self.winConditionsMet():
-            self.toggleGameOver()
+        if self.win_conditions_met():
+            self.toggle_game_over()
 
     # End Game Phases
-    def takeTurn(self):
+    def take_turn(self):
         # Turn consists of:
         # 	INITIAL PHASE
         # 	- Displaying player's hand and amount of tricks (if any)

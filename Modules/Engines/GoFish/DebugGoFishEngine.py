@@ -42,7 +42,7 @@ class DebugGoFishEngine(GoFishEngine):
         player.sortHand()
         player.lookForTricks()
         tricks_added = player.setTricks()
-        self.addMasterTrickCount(tricks_added)
+        self.add_master_trick_count(tricks_added)
 
         if player.gotGuess():
             # If the player has a good guess (e.g. they asked another player for a card that they
@@ -52,9 +52,9 @@ class DebugGoFishEngine(GoFishEngine):
             player.resetGuess()
         else:
             # If the player had to draw from the pile because they guessed badly.
-            self._addPlayerIndex()
+            self._add_player_index()
 
-        if self.winConditionsMet():
+        if self.win_conditions_met():
             self.toggleGameOver()
         else:
             return
