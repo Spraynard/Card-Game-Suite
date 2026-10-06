@@ -14,10 +14,10 @@ class Deck(object):
         return self.id == other.id
 
     def _shuffleCards(self):
-        random.shuffle(self.getCards())
+        random.shuffle(self.get_cards())
 
     def _addCard(self, card):
-        self.getCards().append(card)
+        self.get_cards().append(card)
 
     def _buildDeck(self):
         ranks = [
@@ -42,26 +42,27 @@ class Deck(object):
                 card = Card(r, s)
                 self._addCard(card)
 
-    # Presents a card from the top of the deck.
-    def cardFromTop(self):
-        if not self.currentAmount():
+                # Presents a card from the top of the deck.
+
+    def card_from_top(self):
+        if not self.current_amount():
             print("Why is my length 0?")
             return None
-        card = self.getCards().pop()
+        card = self.get_cards().pop()
         return card
 
-    def getCards(self):
+    def get_cards(self):
         return self.cards
 
-    def currentAmount(self):
-        return len(self.getCards())
+    def current_amount(self):
+        return len(self.get_cards())
 
-    def listCards(self):
-        for i in range(0, len(self.getCards())):
-            print(self.getCards()[i])
+    def list_cards(self):
+        for i in range(0, len(self.get_cards())):
+            print(self.get_cards()[i])
 
-    def hasCard(self, card):
-        if card in self.getCards():
+    def has_card(self, card):
+        if card in self.get_cards():
             return True
         return False
 

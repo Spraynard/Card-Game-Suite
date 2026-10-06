@@ -2,6 +2,7 @@ from .HumanPlayer import HumanPlayer
 from Modules.Cards.Card import Card
 from faker import Faker
 
+
 class Bot(HumanPlayer):
     """Bot object, which is a player. There are taunts available to bots to rouse up the player whenver they make a mistake"""
 
@@ -23,7 +24,7 @@ class Bot(HumanPlayer):
             '%s: "Hahaha, no',
             '%s: "You wish!',
         ]
-        self.chooseDict = {}
+        self.choose_dict = {}
 
     def __repr__(self):
         return "[Bot] %s" % self.id
@@ -44,7 +45,8 @@ class Bot(HumanPlayer):
             + random.choice(self.taunts)
         )
 
-    # Hand Evaluation Functionality
+        # Hand Evaluation Functionality
+
     def _assemble_choose_dict(self):
         hand = self.get_hand()
         for c in hand:
@@ -53,18 +55,18 @@ class Bot(HumanPlayer):
     def _analyze_choose_dict(self):
         # Haha, this is laughably bad AI for the bots.
         # 	Might as well have a random card generator for now
-        maxCount = None
-        rankMax = None
-        cD = self._getChooseDict()
-        chooseDictKeys = cD.keys()
+        max_count = None
+        rank_max = None
+        c_d = self._getChooseDict()
+        choose_dict_keys = c_d.keys()
 
-        for k in chooseDictKeys:
-            currentLength = len(cD[k])
-            if (not maxCount) or (maxCount < currentLength):
-                maxCount = currentLength
-                rankMax = k
+        for k in choose_dict_keys:
+            current_length = len(c_d[k])
+            if (not max_count) or (max_count < current_length):
+                max_count = current_length
+                rank_max = k
 
-        self.set_chosen_card(Card(rankMax))
+        self.set_chosen_card(Card(rank_max))
 
     def _random_choice(self):
         import random
@@ -72,28 +74,29 @@ class Bot(HumanPlayer):
         hand = self.get_hand()
 
         if len(hand) == 0:
-            chooseableCards = Card().acceptDict["ranks"]
-            self.set_chosen_card(Card(random.choice(chooseableCards)))
+            chooseable_cards = Card().accept_dict["ranks"]
+            self.set_chosen_card(Card(random.choice(chooseable_cards)))
         else:
             self.set_chosen_card(random.choice(hand))
 
-    # chooseDict Functionality
+            # chooseDict Functionality
+
     def _getChooseDict(self):
-        return self.chooseDict
+        return self.choose_dict
 
     def _addChooseDict(self, card):
         # Initializes the card rank key with an array if that key is not
         # 	in `chooseDict`. Then appends the card into the key's array.
-        chooseDict = self._getChooseDict()
-        cardRank = card.getRank()
+        choose_dict = self._getChooseDict()
+        card_rank = card.get_rank()
 
-        if not cardRank in chooseDict:
-            chooseDict[cardRank] = []
+        if not card_rank in choose_dict:
+            choose_dict[card_rank] = []
 
-        chooseDict[cardRank].append(card)
+        choose_dict[card_rank].append(card)
 
     def _resetChooseDict(self):
-        self.chooseDict = {}
+        self.choose_dict = {}
 
     def choose_card(self):
         # Implement Bot Card Choosing. Game will not work without this. What I eventually want to to is

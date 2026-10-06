@@ -1,4 +1,4 @@
-def cardRankToNum(rank, variant=None):
+def card_rank_to_num(rank, variant=None):
     if not variant:
         if rank == "Ace":
             return 14
@@ -17,7 +17,7 @@ def cardRankToNum(rank, variant=None):
             return int(rank)
 
 
-def cardSuitRank(suit):
+def card_suit_rank(suit):
     if suit == "Diamonds":
         return 0
     elif suit == "Hearts":
@@ -38,7 +38,7 @@ class Card(object):
         self.rank = str(rank)
         self.suit = suit
         self.variant = variant
-        self.acceptDict = {
+        self.accept_dict = {
             "suits": ["Clubs", "Spades", "Diamonds", "Hearts"],
             "ranks": [
                 "2",
@@ -62,17 +62,17 @@ class Card(object):
             return None
         return (self.rank == other.rank) and (self.suit == other.suit)
 
-    def isSameRank(self, other):
+    def is_same_rank(self, other):
         return self.rank == other.rank
 
     def __lt__(self, other):
-        c1 = cardSuitRank(self.suit), cardRankToNum(self.rank)
-        c2 = cardSuitRank(other.suit), cardRankToNum(other.rank)
+        c1 = card_suit_rank(self.suit), card_rank_to_num(self.rank)
+        c2 = card_suit_rank(other.suit), card_rank_to_num(other.rank)
         return c1 < c2
 
     def __gt__(self, other):
-        c1 = cardSuitRank(self.suit), cardRankToNum(self.rank)
-        c2 = cardSuitRank(other.suit), cardRankToNum(other.rank)
+        c1 = card_suit_rank(self.suit), card_rank_to_num(self.rank)
+        c2 = card_suit_rank(other.suit), card_rank_to_num(other.rank)
         return c1 > c2
 
     def __repr__(self):
@@ -81,17 +81,17 @@ class Card(object):
     def __str__(self):
         return self.rank + " of " + self.suit
 
-    def cardSuitToNum(suit):
+    def card_suit_to_num(suit):
         pass
 
-    def getAcceptDict(self):
-        return self.acceptDict
+    def get_accept_dict(self):
+        return self.accept_dict
 
-    def getRank(self):
+    def get_rank(self):
         return self.rank
 
-    def acceptableRank(self):
-        return self.getRank() in self.getAcceptDict()["ranks"]
+    def acceptable_rank(self):
+        return self.get_rank() in self.get_accept_dict()["ranks"]
 
-    def getSuit(self):
+    def get_suit(self):
         return self.suit

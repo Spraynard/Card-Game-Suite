@@ -9,17 +9,21 @@ from Modules.Engines.GoFish.DebugGoFishEngine import DebugGoFishEngine
 
 import pytest
 
+
 @pytest.fixture
 def human_player():
     return HumanPlayer()
+
 
 @pytest.fixture
 def bot_player():
     return Bot()
 
+
 @pytest.fixture
 def engine():
     return DebugGoFishEngine(True)
+
 
 # Lets ask what the trading phase should do?:
 # 	1. Based on the player and card selected from the decision phase, you should
@@ -34,7 +38,7 @@ def checkStringForBullshit(string):
     return False
 
 
-class TestTradingPhase():
+class TestTradingPhase:
     def test_trading_phase_accept_single_card(self, human_player, bot_player, engine):
         # Steps:
         # 1. Player initialization
@@ -61,18 +65,30 @@ class TestTradingPhase():
             bot_player,
             ask_card.getRank(),
         )
-        assert output1 == acceptOutput1,"Your output is not the same as what I am expecting\
+        assert output1 == acceptOutput1, (
+            "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
 												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
+        )
 
-        assert checkStringForBullshit(output2) == False, "You got some bullshit in your output 2"
-        assert len(bot_player.getGiveArray()) == 0, "Bot Player's Give Array: %s" % bot_player.getGiveArray()
-        assert len(bot_player.getHand()) == 0, "Bot Player's Hand %s" % bot_player.showHand()
+        assert (
+            checkStringForBullshit(output2) == False
+        ), "You got some bullshit in your output 2"
+        assert len(bot_player.getGiveArray()) == 0, (
+            "Bot Player's Give Array: %s" % bot_player.getGiveArray()
+        )
+        assert len(bot_player.getHand()) == 0, (
+            "Bot Player's Hand %s" % bot_player.showHand()
+        )
 
-        assert len(human_player.getHand()) != 0, "Human Player's hand %s" % human_player.showHand()
+        assert len(human_player.getHand()) != 0, (
+            "Human Player's hand %s" % human_player.showHand()
+        )
 
-    def test_trading_phase_accept_multiple_cards(self, human_player, bot_player, engine):
+    def test_trading_phase_accept_multiple_cards(
+        self, human_player, bot_player, engine
+    ):
         # The chosen player should have multiple of the `same` card.
         # 	I do not expect this to work right off the bat, but you know.
         ask_card = Card(5, "Hearts")
@@ -93,15 +109,23 @@ class TestTradingPhase():
             bot_player,
             ask_card.getRank(),
         )
-        assert output1 == acceptOutput1,"Your output is not the same as what I am expecting\
+        assert output1 == acceptOutput1, (
+            "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
 												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
+        )
 
-        assert len(bot_player.getGiveArray()) == 0, "Bot Player's Give Array: %s" % bot_player.getGiveArray()
-        assert bot_player.handCount() == 0, "Bot Player's Hand %s" % bot_player.showHand()
+        assert len(bot_player.getGiveArray()) == 0, (
+            "Bot Player's Give Array: %s" % bot_player.getGiveArray()
+        )
+        assert bot_player.handCount() == 0, (
+            "Bot Player's Hand %s" % bot_player.showHand()
+        )
 
-        assert human_player.handCount() != 0, "Human Player's hand is not empty, as it should be"
+        assert (
+            human_player.handCount() != 0
+        ), "Human Player's hand is not empty, as it should be"
 
     def test_trading_phase_reject_no_cards(self, human_player, bot_player, engine):
         # Player should draw a card from the deck after this.
@@ -129,11 +153,12 @@ class TestTradingPhase():
             bot_player,
             ask_card.getRank(),
         )
-        assert output1 == acceptOutput1,"Your output is not the same as what I am expecting\
+        assert output1 == acceptOutput1, (
+            "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
 												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
-        
+        )
 
         assert human_player.handCount() == 1
         assert bot_player.handCount() == 3
@@ -171,10 +196,12 @@ class TestTradingPhase():
             bot_player,
             ask_card.getRank(),
         )
-        assert output1 == acceptOutput1, "Your output is not the same as what I am expecting\
+        assert output1 == acceptOutput1, (
+            "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
 												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
+        )
 
         acceptOutput3 = (
             "Hey everyone, laugh at %s! They got kicked out of the game for losing!"

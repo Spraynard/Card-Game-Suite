@@ -2,5 +2,5 @@ class Chip(object):
     def __init__(self, value):
         self.value = value
 
-    def getValue(self):
+    def get_value(self):
         return self.value

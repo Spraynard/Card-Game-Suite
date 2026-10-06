@@ -33,7 +33,7 @@ class GoFishEngine(Engine):
             return
         player.displayTricks()
         TerminalOutput.hand(player)
-    
+
     def player_ask_loop(self, choice_list_length):
         """Asks the current player which player they want to choose"""
         choice = None
@@ -152,7 +152,7 @@ class GoFishEngine(Engine):
     # End Game Action Functionality
     def game_start_deal_number_of_cards(self):
         # Three Players or more
-        return  5 if len(self.players) > 3 else 7
+        return 5 if len(self.players) > 3 else 7
 
     # Game Phases Here
     def initial_phase(self, player):

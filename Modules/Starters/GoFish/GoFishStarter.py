@@ -111,7 +111,9 @@ class GoFishStarter:
                 continue
 
             total_player_amount = input_bot_amount + self.human_amount
-            bare_min_player_amt = self.max_players - self.human_amount - input_bot_amount
+            bare_min_player_amt = (
+                self.max_players - self.human_amount - input_bot_amount
+            )
 
             if input_bot_amount > 0 and bare_min_player_amt > 0:
                 print(f"The amount you gave is less than {bare_min_player_amt}")

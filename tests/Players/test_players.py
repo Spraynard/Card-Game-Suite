@@ -6,7 +6,9 @@ from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Players.Bot import Bot
 
 from Modules.Cards.Deck import Deck
-class TestPlayer():
+
+
+class TestPlayer:
     def test_player_1_is_not_bot(self):
         player_1 = HumanPlayer
         player_2 = Bot
@@ -16,7 +18,7 @@ class TestPlayer():
     def test_two_diff_not_equal(self):
         player_1 = HumanPlayer("Jeffery")
         player_2 = HumanPlayer("Robert")
-        assert player_1 !=  player_2
+        assert player_1 != player_2
 
     def test_two_diff_same_name_not_equal(self):
         player_1 = HumanPlayer("Jeffery")
@@ -46,7 +48,8 @@ class TestPlayer():
         # 	cards big when the player is starting out
         assert player_1.hand_count() == 7
 
-class TestBot():
+
+class TestBot:
     def test_if_player_class(self):
         player_1 = HumanPlayer
         player_2 = Bot()
@@ -57,7 +60,9 @@ class TestBot():
         player_1 = HumanPlayer()
         player_2 = Bot()
 
-        assert type(player_2) != "HumanPlayer.HumanPlayer","Player 1 type %s, Player 2 type %s"
+        assert (
+            type(player_2) != "HumanPlayer.HumanPlayer"
+        ), "Player 1 type %s, Player 2 type %s"
 
     def test_two_diff_not_equal(self):
         player_1 = Bot("Jeffery")

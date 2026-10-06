@@ -7,17 +7,21 @@ from Modules.Engines.GoFish.DebugGoFishEngine import DebugGoFishEngine
 
 import pytest
 
+
 @pytest.fixture
 def human_player():
     return HumanPlayer()
+
 
 @pytest.fixture
 def bot_player():
     return Bot()
 
+
 @pytest.fixture
 def engine():
     return DebugGoFishEngine(True)
+
 
 def spawnExtraPlayers(playerType, amount, names=None):
     # Returns: Array with amount of players specified. Returns object if amount == 1

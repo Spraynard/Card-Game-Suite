@@ -14,139 +14,143 @@ class HumanPlayer(Player):
         self.tricks = 0
         # Internal Player's Responses to questions posed by engine
         self.guess = None
-        self.chosenPlayer = None
-        self.chosenCard = None
+        self.chosen_player = None
+        self.chosen_card = None
 
         # Array used to give cards to other players
-        self.giveArray = []
-        self.sortingDict = {}
-        self.trickHolder = []
+        self.give_array = []
+        self.sorting_dict = {}
+        self.trick_holder = []
 
-    # |-------------Talking (Printed Statements)-----------------------------|
-    # These statements will be used during the trading phase. Something to look at to
-    # 	expand, definitely.
+        # |-------------Talking (Printed Statements)-----------------------------|
+        # These statements will be used during the trading phase. Something to look at to
+        # 	expand, definitely.
+
     def random_name(self):
         # Returns a `Player` with a random name from the Faker lib
         # 	can get some pretty funny names :)
         fake = Faker()
-
         return HumanPlayer(fake.name())
 
     def victory_statement(self):
-        statementDict = {
+        statement_dict = {
             1: '"I sure do not!"',
         }
-        print(statementDict[random.choice(list(statementDict.keys()))])
+        print(statement_dict[random.choice(list(statement_dict.keys()))])
 
     def defeat_statement(self):
-        statementDict = {
+        statement_dict = {
             1: '%s: "I do have %s cards. Here they are": %s',
         }
         print(
-            statementDict[random.choice(list(statementDict.keys()))]
-            % (self.get_name(), len(self.getGiveArray()), self.getGiveArray())
+            statement_dict[random.choice(list(statement_dict.keys()))]
+            % (self.get_name(), len(self.get_give_array()), self.get_give_array())
         )
 
     def ask_other_player(self):
-        statementDict = {
+        statement_dict = {
             1: '%s: "Hey %s, Do you have any %ss?"',
         }
         print(
-            statementDict[random.choice(list(statementDict.keys()))]
-            % (self.get_name(), self.get_chosen_player(), self.get_chosen_card().getRank())
+            statement_dict[random.choice(list(statement_dict.keys()))]
+            % (
+                self.get_name(),
+                self.get_chosen_player(),
+                self.get_chosen_card().get_rank(),
+            )
         )
 
     def exclaim(self):
-        if len(self.getGiveArray()) == 1:
-            statementDict = {
+        if len(self.get_give_array()) == 1:
+            statement_dict = {
                 1: '%s: "Dammit, I have %s card of that rank. Here it is: %s"',
                 2: '%s: "Wow, you\'re really good at this! I have %s card of that rank. Here it is you scallywag: %s"',
                 3: '%s: "Are you cheating? I have %s card of that rank. Take it ya dingus!: %s"',
             }
         else:
-            statementDict = {
+            statement_dict = {
                 1: '%s: "Dammit, I have %s cards of that rank. Here\'s your damn cards: %s"',
                 2: '%s: "Wow, you\'re really good at this! I have %s cards of that rank. Here they are you scallywag: %s"',
                 3: '%s: "Are you cheating? I have %s cards of that rank. Take em ya dingus! %s"',
             }
         print(
-            statementDict[random.choice(list(statementDict.keys()))]
-            % (self.get_name(), len(self.getGiveArray()), self.getGiveArray())
+            statement_dict[random.choice(list(statement_dict.keys()))]
+            % (self.get_name(), len(self.get_give_array()), self.get_give_array())
         )
 
     def talk(self, reason):
-        reasonDict = {
+        reason_dict = {
             "victory": self.victory_statement,
             "defeat": self.defeat_statement,
             "exclaim": self.exclaim,
             "ask": self.ask_other_player,
         }
 
-        reasonDict[reason]()
+        reason_dict[reason]()
 
-    # |-------------Player to Player Interaction Functionality---------------|
+        # |-------------Player to Player Interaction Functionality---------------|
 
     def get_chosen_player(self):
-        return self.chosenPlayer
+        return self.chosen_player
 
     def set_chosen_player(self, player):
-        self.chosenPlayer = player
+        self.chosen_player = player
 
     def get_chosen_card(self):
-        return self.chosenCard
+        return self.chosen_card
 
     def set_chosen_card(self, card):
-        self.chosenCard = card
+        self.chosen_card = card
 
     def reset_chosen_variables(self):
-        self.chosenPlayer = False
-        self.chosenCard = False
+        self.chosen_player = False
+        self.chosen_card = False
 
-    # |_____________End Player to Player Interaction Functionality-----------|
-    # Guess Functionalty
+        # |_____________End Player to Player Interaction Functionality-----------|
+        # Guess Functionalty
 
     def set_guess(self, boolean):
         if not type(boolean) == bool:
             raise Exception("You have to set a boolean value (True/False)")
         self.guess = boolean
 
-    def gotGuess(self):
+    def got_guess(self):
         return self.guess
 
-    def resetGuess(self):
+    def reset_guess(self):
         self.set_guess(False)
 
-    def guessedCorrectly(self):
+    def guessed_correctly(self):
         self.set_guess(True)
 
-    # End Guess Functionality
+        # End Guess Functionality
 
-    # Trick functionality
+        # Trick functionality
 
-    def addPlayerTrick(self):
+    def add_player_trick(self):
         self.tricks += 1
 
-    def addTotalTrick(self, trickRef):
-        trickRef += 1
+    def add_total_trick(self, trick_ref):
+        trick_ref += 1
 
-    def getTricks(self):
+    def get_tricks(self):
         return self.tricks
 
-    def hasTricks(self):
-        return not (self.getTricks == 0)
+    def has_tricks(self):
+        return not (self.get_tricks == 0)
 
-    def getTrickHolder(self):
-        return self.trickHolder
+    def get_trick_holder(self):
+        return self.trick_holder
 
-    def addTrickHolder(self, trick):
-        self.getTrickHolder().append(trick)
+    def add_trick_holder(self, trick):
+        self.get_trick_holder().append(trick)
 
-    def resetTrickHolder(self):
-        self.trickHolder = []
+    def reset_trick_holder(self):
+        self.trick_holder = []
 
-    def displayTricks(self):
-        if self.hasTricks():
-            trick_n = self.getTricks()
+    def display_tricks(self):
+        if self.has_tricks():
+            trick_n = self.get_tricks()
             if trick_n == 1:
                 print("You currently have %s trick" % trick_n)
             else:
@@ -154,115 +158,119 @@ class HumanPlayer(Player):
         else:
             print("You currently have 0 tricks")
 
-    def delTrickFromHand(self, trick):
+    def del_trick_from_hand(self, trick):
         hand = self.get_hand()
         for c in trick:
             hand.remove(c)
 
-    def lookForTricks(self):
-        sD = self.getSortingDict()
+    def look_for_tricks(self):
+        s_d = self.get_sorting_dict()
 
-        for g in sD.values():
+        for g in s_d.values():
             if len(g) == 4:
-                self.addTrickHolder(g)
+                self.add_trick_holder(g)
 
-    def setTricks(self):
-        tH = self.getTrickHolder()
+    def set_tricks(self):
+        t_h = self.get_trick_holder()
         tricks_added = 0
-        while not len(tH) == 0:
-            self.addPlayerTrick()
-            t = tH.pop()
-            self.delTrickFromHand(t)
+        while not len(t_h) == 0:
+            self.add_player_trick()
+            t = t_h.pop()
+            self.del_trick_from_hand(t)
             tricks_added += 1
-        # Have to reset the sorting dict here or we're fucked
-        self.resetSortingDict()
+            # Have to reset the sorting dict here or we're fucked
+        self.reset_sorting_dict()
         return tricks_added
 
-    # End Trick Functionality
+        # End Trick Functionality
 
-    # NEEDS ATTENTION - OCTOBER 17th, 2017
-    def getSortingDict(self):
-        return self.sortingDict
+        # NEEDS ATTENTION - OCTOBER 17th, 2017
 
-    def resetSortingDict(self):
-        self.sortingDict = {}
+    def get_sorting_dict(self):
+        return self.sorting_dict
 
-    def populateSortingDict(self):
-        sortingDict = self.getSortingDict()
+    def reset_sorting_dict(self):
+        self.sorting_dict = {}
+
+    def populate_sorting_dict(self):
+        sorting_dict = self.get_sorting_dict()
         hand = self.get_hand()
         if self.hand_count() == 0:
             return
         for c in self.get_hand():
-            cardRank = c.getRank()
-            if not cardRank in sortingDict:
-                sortingDict[cardRank] = []
-            sortingDict[cardRank].append(c)
+            card_rank = c.get_rank()
+            if not card_rank in sorting_dict:
+                sorting_dict[card_rank] = []
+            sorting_dict[card_rank].append(c)
 
-    def formatCardsBySortingDict(self):
-        sD = self.getSortingDict()
-        handHolder = []
-        for g in sD.values():
-            handHolder += g
-        self.set_hand(handHolder)
+    def format_cards_by_sorting_dict(self):
+        s_d = self.get_sorting_dict()
+        hand_holder = []
+        for g in s_d.values():
+            hand_holder += g
+        self.set_hand(hand_holder)
 
-    def sortHand(self):
+    def sort_hand(self):
         # Go through the hand. Will group similar cards within
         # 	sortingDict and then group them. Sorting dict may be used
         # 	to find out if a group can become a trick. I don't know
-        self.populateSortingDict()
-        self.formatCardsBySortingDict()
+        self.populate_sorting_dict()
+        self.format_cards_by_sorting_dict()
 
-    # End Player Hand Functionality
+        # End Player Hand Functionality
 
-    # Code for player specific TRADING PHASE operations
-    def hasCard(self, flagCard):
+        # Code for player specific TRADING PHASE operations
+
+    def has_card(self, flag_card):
         # Non variant version of hasCard.
         # This version just plain checks to see if the player has
         # 	any cards of given rank in their hands.
         hand = self.get_hand()
-        flagCardRank = flagCard.getRank()
+        flag_card_rank = flag_card.get_rank()
         rank_hand = []
         for c in hand:
-            rank_hand.append(c.getRank())
-        return flagCardRank in rank_hand
+            rank_hand.append(c.get_rank())
+        return flag_card_rank in rank_hand
 
-    # self.giveArray Helpers
-    def getGiveArray(self):
-        return self.giveArray
+        # self.giveArray Helpers
 
-    def addGiveArray(self, card):
-        self.giveArray.append(card)
+    def get_give_array(self):
+        return self.give_array
 
-    def resetGiveArray(self):
-        self.giveArray = []
+    def add_give_array(self, card):
+        self.give_array.append(card)
 
-    def removeCard(self, card):
+    def reset_give_array(self):
+        self.give_array = []
+
+    def remove_card(self, card):
         self.hand.remove(card)
 
-    def removeRelevantCards(self):
-        giveArray = self.getGiveArray()
-        for c in giveArray:
-            self.removeCard(c)
+    def remove_relevant_cards(self):
+        give_array = self.get_give_array()
+        for c in give_array:
+            self.remove_card(c)
 
-    def populateGiveArray(self, chosenCard):
+    def populate_give_array(self, chosen_card):
         # Giving cards means finding the cards of the specific rank
         # 	in the hand, taking them out of the hand,
         # 	and putting them in the give array, which
         # 	removes said cards from hand.
         hand = self.get_hand()
         for c in hand:
-            if c.isSameRank(chosenCard):
+            if c.is_same_rank(chosen_card):
                 # Appending it to the array of cards you're going to give
-                self.addGiveArray(c)
-        # Removing it from the player's hand
-        self.removeRelevantCards()
+                self.add_give_array(c)
+                # Removing it from the player's hand
+        self.remove_relevant_cards()
 
-    # Player => Player Card Interaction
-    def giveToPlayer(self, other):
-        other.takeRelevantCards(self.getGiveArray())
-        self.resetGiveArray()
+        # Player => Player Card Interaction
 
-    def concedeDefeat(self, chosenCard):
-        self.populateGiveArray(chosenCard)
+    def give_to_player(self, other):
+        other.takeRelevantCards(self.get_give_array())
+        self.reset_give_array()
 
-    # End TRADING PHASE operation code
+    def concede_defeat(self, chosen_card):
+        self.populate_give_array(chosen_card)
+
+        # End TRADING PHASE operation code

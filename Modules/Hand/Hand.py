@@ -1,11 +1,11 @@
 class Hand(object):
     def __init__(self):
-        self.cardArray = []
-        self.handValue = 0
+        self.card_array = []
+        self.hand_value = 0
 
-    def addCard(self, card):
-        self.cardArray.append(card)
-        self.addHandValue(int(card.getRank()))
+    def add_card(self, card):
+        self.card_array.append(card)
+        self.addHandValue(int(card.get_rank()))
 
-    def removeCard(self, card):
-        self.cardArray.remove(card)
+    def remove_card(self, card):
+        self.card_array.remove(card)

@@ -3,19 +3,20 @@ from Modules.Cards.Card import Card
 from Modules.Players.HumanPlayer import HumanPlayer
 
 
-class Engine():
+class Engine:
     # Controls the start, turn, and checks of the actual game.
     def __init__(self, test=False):
         self.players = None
         self.deck = None
         # Index of the current player
-        self.playerIndex = 0
+        self.player_index = 0
         self.variant = None
         self.test = test
-        self.endGame = False
+        self.end_game = False
 
-    # All Engines will have this obtaining and setting deck functionality
-    def getDeck(self) -> Deck:
+        # All Engines will have this obtaining and setting deck functionality
+
+    def get_deck(self) -> Deck:
         # Summary: Gives the deck object out.
         # Returns: `self.deck` - Deck Object
         return self.deck
@@ -25,49 +26,50 @@ class Engine():
         # Input: `new_deck` - The new value of the deck object I want to set to
         # Returns: Void
         self.deck = Deck()
-        self.getDeck().initialize()
+        self.get_deck().initialize()
 
-    # All Engines will handle getting and setting current players with this functionality
-    def getPlayers(self):
+        # All Engines will handle getting and setting current players with this functionality
+
+    def get_players(self):
         return self.players
 
-    def getPlayerAmount(self):
+    def get_player_amount(self):
         return len(self.players)
 
-    def setPlayers(self, players):
+    def set_players(self, players):
         self.players = players
 
-    def removePlayer(self, player):
-        players = self.getPlayers()
+    def remove_player(self, player):
+        players = self.get_players()
         players.remove(player)
 
-    def listPlayersHands(self):
-        players = self.getPlayers()
+    def list_players_hands(self):
+        players = self.get_players()
 
         for p in players:
             print("%s: %s" % (p, player.getHand()))
             # End Player Handling Functionality
 
     def _getPlayerIndex(self):
-        return self.playerIndex
+        return self.player_index
 
     def _addPlayerIndex(self):
-        players = self.getPlayers()
+        players = self.get_players()
 
         if (self._getPlayerIndex() + 1) == len(players):
-            self.playerIndex = 0
+            self.player_index = 0
         else:
-            self.playerIndex += 1
+            self.player_index += 1
 
     def get_current_player(self):
-        return self.getPlayers()[self._getPlayerIndex()]
+        return self.get_players()[self._getPlayerIndex()]
 
-    def returnWinningPlayer(self):
-        pL = self.getPlayers()
+    def return_winning_player(self):
+        p_l = self.get_players()
         max_tricks = 0
         max_player_array = None
-        for p in pL:
-            player_score = p.getTricks()
+        for p in p_l:
+            player_score = p.get_tricks()
             if max_tricks == player_score and (not player_score == 0):
                 max_player_array.append(p)
             elif max_tricks < player_score:
@@ -79,37 +81,40 @@ class Engine():
         else:
             return max_player_array
 
-    # All Engines will have a game loop. Unsure if it will be set this way throughout
+            # All Engines will have a game loop. Unsure if it will be set this way throughout
+
     def game_loop(self):
         # Will stop when there is a player that has gotten the winning conditions of the game
-        while not self.gameOver():
+        while not self.game_over():
             # Getting the current player for the turn
-            self.takeTurn()
+            self.take_turn()
 
-        self.congratulations(self.returnWinningPlayer())
+        self.congratulations(self.return_winning_player())
 
-    # All Engines will have a game that will end :)
-    def gameOver(self):
-        return self.endGame
+        # All Engines will have a game that will end :)
 
-    def toggleGameOver(self):
-        self.endGame = not self.endGame
+    def game_over(self):
+        return self.end_game
 
-    # All Engines, at end game, will congratulate players
-    def congratulations(self, playerObj):
+    def toggle_game_over(self):
+        self.end_game = not self.end_game
+
+        # All Engines, at end game, will congratulate players
+
+    def congratulations(self, player_obj):
 
         winning_players = ""
         winning_trick_amount = None
 
-        if isinstance(playerObj, HumanPlayer):
-            winning_players = playerObj
-            winning_trick_amount = playerObj.getTricks()
-        elif type(playerObj) == list:
-            playerAmt = len(playerObj)
-            for i in range(playerObj):
-                if i == (playerObj - 1):
-                    winning_players += playerObj[i]
-                    winning_trick_amount = playerObj[i].getTricks()
+        if isinstance(player_obj, HumanPlayer):
+            winning_players = player_obj
+            winning_trick_amount = player_obj.get_tricks()
+        elif type(player_obj) == list:
+            player_amt = len(player_obj)
+            for i in range(player_obj):
+                if i == (player_obj - 1):
+                    winning_players += player_obj[i]
+                    winning_trick_amount = player_obj[i].get_tricks()
                 else:
                     winning_players += playerobj[i] + ", "
         else:
@@ -123,12 +128,12 @@ class Engine():
         )
 
     def deal_hands(self):
-        deck = self.getDeck()
-        players = self.getPlayers()
+        deck = self.get_deck()
+        players = self.get_players()
 
         for p in players:
             p.drawCards(deck, self.game_start_deal_number_of_cards())
-   
+
     def game_start_deal_number_of_cards(self):
         """Obtain the amount of cards each player should start with at the start of the game."""
         raise Exception("game_start_deal_number_of_cards not implemented")
