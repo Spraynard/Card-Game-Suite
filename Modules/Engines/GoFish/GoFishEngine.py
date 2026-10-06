@@ -57,7 +57,7 @@ class GoFishEngine(Engine):
             import random
 
             bot = player
-            bot.setChosenPlayer(random.choice(choice_list))
+            bot.set_chosen_player(random.choice(choice_list))
         else:
             # Implement Player() player to ask
             print("Which player will you ask a card from?")
@@ -65,7 +65,7 @@ class GoFishEngine(Engine):
                 print(f"{i + 1}: {choice_list[i]}")
             choice = self.player_ask_loop(len(choice_list))
 
-        player.setChosenPlayer(choice_list[choice])
+        player.set_chosen_player(choice_list[choice])
 
     def choose_card(self, player):
         """
@@ -168,14 +168,14 @@ class GoFishEngine(Engine):
         deck = self.getDeck()
 
         if not player.gotGuess():
-            if (player.handCount() == 0) and (deck.currentAmount() == 0):
+            if (player.hand_count() == 0) and (deck.currentAmount() == 0):
                 print(
                     "Hey everyone, laugh at %s! They got kicked out of the game for losing!"
                     % player
                 )
                 self.removePlayer(player)
             else:
-                drawnCard = player.drawCard(deck)
+                drawnCard = player.draw_card(deck)
 
                 if drawnCard == chosenCard:
                     self.takeTurn()

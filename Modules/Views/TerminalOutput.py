@@ -11,7 +11,7 @@ class TerminalOutput:
     @staticmethod
     def hand(player: Player) -> list:
         # Prints out the hand legibly in a line!
-        hand = player.getHand()
+        hand = player.get_hand()
         cards = [str(c) for c in hand]
         rows = [", ".join(cards[i : i + 3]) for i in range(0, len(cards), 3)]
         TerminalOutput.header("HAND")

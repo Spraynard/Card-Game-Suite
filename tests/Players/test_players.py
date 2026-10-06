@@ -33,18 +33,18 @@ class TestPlayer():
         assert deck.currentAmount() == 52
 
         # Player draws a full seven card hand from the deck
-        player_1.drawCards(deck, 7)
+        player_1.draw_cards(deck, 7)
 
         # Make sure after drawing that the deck takes 7
         # 	cards away from its full total
         assert deck.currentAmount() == 45
 
         # Assert that the player actually has a hand
-        assert player_1.handCount() > 0
+        assert player_1.hand_count() > 0
 
         # At least for Go Fish, the hand should be 7
         # 	cards big when the player is starting out
-        assert player_1.handCount() == 7
+        assert player_1.hand_count() == 7
 
 class TestBot():
     def test_if_player_class(self):

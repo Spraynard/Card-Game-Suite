@@ -10,10 +10,10 @@ class HumanPlayer(Player):
 		self.gameTotal = 0
 		self.money = None
 
-	def victoryStatement(self):
+	def victory_statement(self):
 		pass
 
-	def defeatStatement(self):
+	def defeat_statement(self):
 		pass
 
 	def talk(self, reason):
@@ -36,6 +36,6 @@ class HumanPlayer(Player):
 
 		if ( self.getGameTotal() < 21 ):
 			decisionsArray.append('Hit')
-		elif( self.getHand().length < 3 and )
+		elif( self.get_hand().length < 3 and )
 
 

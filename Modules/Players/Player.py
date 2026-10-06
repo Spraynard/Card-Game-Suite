@@ -1,4 +1,3 @@
-import random
 import uuid
 
 from Modules.Cards.Card import Card
@@ -37,7 +36,7 @@ class Player(object):
         fake = Faker()
         return Player(fake.name())
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
     #######################################
@@ -47,10 +46,10 @@ class Player(object):
     # 	shall be implemented in the respective player class
     #######################################
 
-    def victoryStatement(self):
+    def victory_statement(self):
         raise NotImplementedError("Victory Statement")
 
-    def defeatStatement(self):
+    def defeat_statement(self):
         raise NotImplementedError("Defeat Statement")
 
     def talk(self, reason):
@@ -60,42 +59,42 @@ class Player(object):
     # Global Hand Helpers
     ##########################
 
-    def getHand(self):
+    def get_hand(self):
         return self.hand
 
-    def setHand(self, hand):
+    def set_hand(self, hand):
         self.hand = hand
 
-    def hasHand(self):
-        return self.handCount() > 0
+    def has_hand(self):
+        return self.hand_count() > 0
 
     # Gives the length of a player's hand.
-    def handCount(self):
-        return len(self.getHand())
+    def hand_count(self):
+        return len(self.get_hand())
 
     #|---------Drawing or Taking Cards Functionality--------|
 
-    def drawCard(self, deck: Deck) -> Card:
+    def draw_card(self, deck: Deck) -> Card:
         # Summary: Draws a single card from the deck and then adds it to the player's hand
         # Input: `Deck` - The deck being used by the players.
         # Return: Void if everything goes alright. False if shit is messed up
         card = deck.cardFromTop()
-        self.takeCard(card)
+        self.take_card(card)
         return card
 
-    def drawCards(self, deck: Deck, amount: int) -> list:
+    def draw_cards(self, deck: Deck, amount: int) -> list:
         cards = []
         for i in range(amount):
-            cards.append(self.drawCard(deck))
+            cards.append(self.draw_card(deck))
         return cards
 
-    def takeCard(self, card) -> None:
+    def take_card(self, card) -> None:
         self.hand.append(card)
 
-    def takeRelevantCards(self, cardArray) -> None:
+    def take_relevant_cards(self, cardArray) -> None:
         for c in cardArray:
-            self.takeCard(c)
+            self.take_card(c)
 
     # |--------End Drawing or Taking Cards Functionality-----|
-    def resetHand(self) -> None:
+    def reset_hand(self) -> None:
         self.hand = []

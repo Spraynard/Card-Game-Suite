@@ -32,28 +32,28 @@ class HumanPlayer(Player):
 
         return HumanPlayer(fake.name())
 
-    def victoryStatement(self):
+    def victory_statement(self):
         statementDict = {
             1: '"I sure do not!"',
         }
         print(statementDict[random.choice(list(statementDict.keys()))])
 
-    def defeatStatement(self):
+    def defeat_statement(self):
         statementDict = {
             1: '%s: "I do have %s cards. Here they are": %s',
         }
         print(
             statementDict[random.choice(list(statementDict.keys()))]
-            % (self.getName(), len(self.getGiveArray()), self.getGiveArray())
+            % (self.get_name(), len(self.getGiveArray()), self.getGiveArray())
         )
 
-    def askOtherPlayer(self):
+    def ask_other_player(self):
         statementDict = {
             1: '%s: "Hey %s, Do you have any %ss?"',
         }
         print(
             statementDict[random.choice(list(statementDict.keys()))]
-            % (self.getName(), self.getChosenPlayer(), self.getChosenCard().getRank())
+            % (self.get_name(), self.get_chosen_player(), self.get_chosen_card().getRank())
         )
 
     def exclaim(self):
@@ -71,41 +71,41 @@ class HumanPlayer(Player):
             }
         print(
             statementDict[random.choice(list(statementDict.keys()))]
-            % (self.getName(), len(self.getGiveArray()), self.getGiveArray())
+            % (self.get_name(), len(self.getGiveArray()), self.getGiveArray())
         )
 
     def talk(self, reason):
         reasonDict = {
-            "victory": self.victoryStatement,
-            "defeat": self.defeatStatement,
+            "victory": self.victory_statement,
+            "defeat": self.defeat_statement,
             "exclaim": self.exclaim,
-            "ask": self.askOtherPlayer,
+            "ask": self.ask_other_player,
         }
 
         reasonDict[reason]()
 
     # |-------------Player to Player Interaction Functionality---------------|
 
-    def getChosenPlayer(self):
+    def get_chosen_player(self):
         return self.chosenPlayer
 
-    def setChosenPlayer(self, player):
+    def set_chosen_player(self, player):
         self.chosenPlayer = player
 
-    def getChosenCard(self):
+    def get_chosen_card(self):
         return self.chosenCard
 
     def set_chosen_card(self, card):
         self.chosenCard = card
 
-    def resetChosenVariables(self):
+    def reset_chosen_variables(self):
         self.chosenPlayer = False
         self.chosenCard = False
 
     # |_____________End Player to Player Interaction Functionality-----------|
     # Guess Functionalty
 
-    def setGuess(self, boolean):
+    def set_guess(self, boolean):
         if not type(boolean) == bool:
             raise Exception("You have to set a boolean value (True/False)")
         self.guess = boolean
@@ -114,10 +114,10 @@ class HumanPlayer(Player):
         return self.guess
 
     def resetGuess(self):
-        self.setGuess(False)
+        self.set_guess(False)
 
     def guessedCorrectly(self):
-        self.setGuess(True)
+        self.set_guess(True)
 
     # End Guess Functionality
 
@@ -155,7 +155,7 @@ class HumanPlayer(Player):
             print("You currently have 0 tricks")
 
     def delTrickFromHand(self, trick):
-        hand = self.getHand()
+        hand = self.get_hand()
         for c in trick:
             hand.remove(c)
 
@@ -189,10 +189,10 @@ class HumanPlayer(Player):
 
     def populateSortingDict(self):
         sortingDict = self.getSortingDict()
-        hand = self.getHand()
-        if self.handCount() == 0:
+        hand = self.get_hand()
+        if self.hand_count() == 0:
             return
-        for c in self.getHand():
+        for c in self.get_hand():
             cardRank = c.getRank()
             if not cardRank in sortingDict:
                 sortingDict[cardRank] = []
@@ -203,7 +203,7 @@ class HumanPlayer(Player):
         handHolder = []
         for g in sD.values():
             handHolder += g
-        self.setHand(handHolder)
+        self.set_hand(handHolder)
 
     def sortHand(self):
         # Go through the hand. Will group similar cards within
@@ -219,7 +219,7 @@ class HumanPlayer(Player):
         # Non variant version of hasCard.
         # This version just plain checks to see if the player has
         # 	any cards of given rank in their hands.
-        hand = self.getHand()
+        hand = self.get_hand()
         flagCardRank = flagCard.getRank()
         rank_hand = []
         for c in hand:
@@ -249,7 +249,7 @@ class HumanPlayer(Player):
         # 	in the hand, taking them out of the hand,
         # 	and putting them in the give array, which
         # 	removes said cards from hand.
-        hand = self.getHand()
+        hand = self.get_hand()
         for c in hand:
             if c.isSameRank(chosenCard):
                 # Appending it to the array of cards you're going to give

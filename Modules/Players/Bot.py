@@ -39,14 +39,14 @@ class Bot(HumanPlayer):
         import random
 
         return (
-            random.choice(self.rejections) % self.getName()
+            random.choice(self.rejections) % self.get_name()
             + ". "
             + random.choice(self.taunts)
         )
 
     # Hand Evaluation Functionality
     def _assemble_choose_dict(self):
-        hand = self.getHand()
+        hand = self.get_hand()
         for c in hand:
             self._addChooseDict(c)
 
@@ -69,7 +69,7 @@ class Bot(HumanPlayer):
     def _random_choice(self):
         import random
 
-        hand = self.getHand()
+        hand = self.get_hand()
 
         if len(hand) == 0:
             chooseableCards = Card().acceptDict["ranks"]
