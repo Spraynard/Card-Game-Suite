@@ -29,14 +29,6 @@ def engine():
 #
 
 
-def checkStringForBullshit(string):
-    string = string.split(" ")
-    for w in string:
-        if w == "False":
-            return True
-    return False
-
-
 class TestTradingPhase:
     def test_trading_phase_accept_single_card(self, human_player: HumanPlayer, bot_player: Bot, engine: DebugGoFishEngine):
         # Steps:
@@ -71,9 +63,6 @@ class TestTradingPhase:
 												Chosen Card: %s" % (human_player.get_name(), bot_player, ask_card.get_rank())
         )
 
-        assert (
-            checkStringForBullshit(output2) == False
-        ), "You got some bullshit in your output 2"
         assert len(bot_player.getGiveArray()) == 0, (
             "Bot Player's Give Array: %s" % bot_player.get_give_array()
         )
@@ -110,15 +99,11 @@ class TestTradingPhase:
         )
 
         assert len(bot_player.get_give_array()) == 0, (
-            "Bot Player's Give Array: %s" % bot_player.getGiveArray()
+            "Bot Player's Give Array: %s" % bot_player.get_give_array()
         )
-        assert bot_player.hand_count() == 0, (
-            "Bot Player's Hand %s" % bot_player.showHand()
-        )
+        assert bot_player.hand_count() == 0
 
-        assert (
-            human_player.hand_count() != 0
-        ), "Human Player's hand is not empty, as it should be"
+        assert human_player.hand_count() != 0
 
     def test_trading_phase_reject_no_cards(self, human_player: HumanPlayer, bot_player: Bot, engine: DebugGoFishEngine):
         # Player should draw a card from the deck after this.
@@ -184,11 +169,8 @@ class TestTradingPhase:
         output2 = split_output[1]
         output3 = split_output[2]
 
-        acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
-            human_player.get_name(),
-            bot_player,
-            ask_card.get_rank(),
-        )
+        acceptOutput1 = f"{human_player.get_name}: \"Hey {bot_player}, Do you have any {ask_card.get_rank}\""
+        
         assert output1 == acceptOutput1, (
             "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\

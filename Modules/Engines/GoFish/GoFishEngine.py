@@ -135,7 +135,7 @@ class GoFishEngine(Engine):
                 bot.talk("exclaim")
             else:
                 chosen_player.talk("defeat")
-            # cardsToChangePlayers = chosenPlayer.
+
             chosen_player.give_to_player(player)
         else:
             if isinstance(chosen_player, Bot):
@@ -199,7 +199,7 @@ class GoFishEngine(Engine):
             self.take_turn()
         else:
             # If the player had to draw from the pile because they guessed badly.
-            self._add_player_index()
+            self.add_player_index()
 
         if self.win_conditions_met():
             self.toggle_game_over()

@@ -49,7 +49,6 @@ class Deck(object):
         Draw a card from the top of the deck
         """
         if not self.current_amount():
-            print("Why is my length 0?")
             return None
         card = self.get_cards().pop()
         return card
