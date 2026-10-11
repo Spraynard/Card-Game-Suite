@@ -81,7 +81,10 @@ class Player(object):
         # Input: `Deck` - The deck being used by the players.
         # Return: Void if everything goes alright. False if shit is messed up
         card = deck.card_from_top()
-        self.take_card(card)
+
+        if card:
+            self.take_card(card)
+            
         return card
 
     def draw_cards(self, deck: Deck, amount: int) -> list:
