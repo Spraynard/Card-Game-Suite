@@ -44,7 +44,10 @@ class Deck(object):
 
                 # Presents a card from the top of the deck.
 
-    def card_from_top(self):
+    def card_from_top(self) -> Card | None:
+        """
+        Draw a card from the top of the deck
+        """
         if not self.current_amount():
             print("Why is my length 0?")
             return None
