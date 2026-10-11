@@ -9,13 +9,14 @@
 # * If the opponent has a card(s) of that rank, the opponent must give the card(s) to the player who requested it and that player gets another turn
 # * If the opponent does not have any cards of that rank, the requesting player must Go Fish and draw a random card from the pool; ending that player's turn
 # * As soon as a player collects a book of four cards of the same rank (ex. four Jacks or four 3s), they must lay their book down; removing the cards from their hand
-# * If a player has no cards in their hand, they must draw from the pool; if the pool is empty, that player is out of the game
+# * If a player has no cards in their hand, they must draw from the pool
+# * If the pool is empty:
+#       * If the player has no cards, they are out of the game.
+#       * Play without drawing cards otherwise.
 # * The game is over when all 13 sets of four, books, have been matched
 # * The player with the most books is determined the winner
 from random import shuffle as shuffle
 from time import sleep as sleep
-
-import sys
 
 from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Players.Bot import Bot
