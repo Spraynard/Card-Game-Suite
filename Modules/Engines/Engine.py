@@ -54,7 +54,7 @@ class Engine:
     def _get_player_index(self):
         return self.player_index
 
-    def _add_player_index(self):
+    def add_player_index(self):
         players = self.get_players()
 
         if (self._get_player_index() + 1) == len(players):
@@ -63,7 +63,10 @@ class Engine:
             self.player_index += 1
 
     def get_current_player(self):
-        return self.get_players()[self._get_player_index()]
+        try:
+            return self.get_players()[self._get_player_index()]
+        except IndexError:
+            print("Error: List Index Out of Range")
 
     def return_winning_player(self):
         player_list = self.get_players()
