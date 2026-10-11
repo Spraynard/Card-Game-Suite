@@ -18,7 +18,7 @@ class GoFishEngine(Engine):
     trick_count = 0
 
     # Game Action Functionality
-    def getMasterTrickCount(self):
+    def get_master_trick_count(self):
         # Return Engine's total trick count
         return self.trick_count
 
@@ -40,7 +40,7 @@ class GoFishEngine(Engine):
         choice = None
         while True:
             choice = int(input("Please enter your choice: ")) - 1
-            if (choice < 0) or (choice >= choiceListLength):
+            if (choice < 0) or (choice >= choice_list_length):
                 print("\nError: That is not one of the player choices")
             else:
                 break
@@ -172,7 +172,7 @@ class GoFishEngine(Engine):
                     "Hey everyone, laugh at %s! They got kicked out of the game for losing!"
                     % player
                 )
-                self.removePlayer(player)
+                self.remove_player(player)
             else:
                 drawn_card = player.draw_card(deck)
 
@@ -182,7 +182,7 @@ class GoFishEngine(Engine):
         player.reset_chosen_variables()
 
     def win_conditions_met(self):
-        return self.getMasterTrickCount() == 13
+        return self.get_master_trick_count() == 13
 
     def end_phase(self, player: Player):
         player.sort_hand()
@@ -204,7 +204,6 @@ class GoFishEngine(Engine):
         if self.win_conditions_met():
             self.toggle_game_over()
 
-    # End Game Phases
     def take_turn(self):
         # Turn consists of:
         # 	INITIAL PHASE
