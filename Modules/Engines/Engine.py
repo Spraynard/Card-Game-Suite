@@ -1,8 +1,8 @@
 from Modules.Cards.Deck import Deck
-from Modules.Cards.Card import Card
 from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Players.Player import Player
-
+from Modules.Players.HumanPlayer import HumanPlayer
+from Modules.Views.TerminalOutput import TerminalOutput
 
 class Engine:
     # Controls the start, turn, and checks of the actual game.
@@ -16,6 +16,15 @@ class Engine:
         self.end_game = False
 
         # All Engines will have this obtaining and setting deck functionality
+
+    def display_current_player_info(self, player: HumanPlayer):
+        # Give
+        if isinstance(player, Bot):
+            # No need to display if
+            # 	the player is a bot
+            return
+        player.display_tricks()
+        TerminalOutput.hand(player)
 
     def get_deck(self) -> Deck:
         # Summary: Gives the deck object out.
@@ -86,24 +95,26 @@ class Engine:
             return max_player_array
 
             # All Engines will have a game loop. Unsure if it will be set this way throughout
+    def take_turn(self, player: Player) -> None:
+        """
+        General abstraction over one turn of the card game
 
+        Arguments:
+        player - Player that is taking the turn
+        """
+        raise Exception("take_turn -- Not Implemented")
+    
     def game_loop(self) -> None:
-        # Will stop when there is a player that has gotten the winning conditions of the game
-        while not self.game_over():
+        """
+        This is the main game loop. Every run tests if the game 
+        is 'over'
+        """
+        while not self.end_game:
+            player = self.get_current_player()
             # Getting the current player for the turn
-            self.take_turn()
+            self.take_turn(player)
 
         self.congratulations(self.return_winning_player())
-
-        # All Engines will have a game that will end :)
-
-    def game_over(self):
-        return self.end_game
-
-    def toggle_game_over(self):
-        self.end_game = not self.end_game
-
-        # All Engines, at end game, will congratulate players
 
     def congratulations(self, player_obj):
 

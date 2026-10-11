@@ -1,5 +1,9 @@
-from Modules.Starters.GoFish.GoFishStarter import GoFishStarter
+from Modules.Starters.GoFish.GoFish import GoFish 
 
+games_available = {
+    'Go Fish' : GoFish,
+    'Blackjack' : 
+}
 if __name__ == "__main__":
-    starter = GoFishStarter()
-    starter.initialize_go_fish()
+    starter = GoFish()
+    starter.initialize()

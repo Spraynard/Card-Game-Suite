@@ -3,7 +3,6 @@ from Modules.Engines.Engine import Engine
 from Modules.Players import HumanPlayer
 from Modules.Players.Bot import Bot
 from Modules.Players.Player import Player
-from Modules.Views.TerminalOutput import TerminalOutput
 
 """
 Right now the engine and the UI are mixed together.
@@ -25,15 +24,6 @@ class GoFishEngine(Engine):
     def add_master_trick_count(self, amount):
         # Add the amount referenced in the amount param to the total trick count
         self.trick_count += amount
-
-    def display_current_player_info(self, player: HumanPlayer):
-        # Give
-        if isinstance(player, Bot):
-            # No need to display if
-            # 	the player is a bot
-            return
-        player.display_tricks()
-        TerminalOutput.hand(player)
 
     def player_ask_loop(self, choice_list_length):
         """Asks the current player which player they want to choose"""
@@ -202,9 +192,9 @@ class GoFishEngine(Engine):
             self.add_player_index()
 
         if self.win_conditions_met():
-            self.toggle_game_over()
+            self.end_game = True
 
-    def take_turn(self):
+    def take_turn(self, player: Player):
         # Turn consists of:
         # 	INITIAL PHASE
         # 	- Displaying player's hand and amount of tricks (if any)
@@ -217,7 +207,6 @@ class GoFishEngine(Engine):
         # 	END PHASE
         # 	- Scan hand to see if there are any tricks available
         # 	- If four tricks, player wins
-        player = self.get_current_player()
         self.initial_phase(player)
         self.decision_phase(player)
         self.trading_phase(player)

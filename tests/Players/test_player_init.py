@@ -1,20 +1,20 @@
 import os
 import sys
 
-from Modules.Starters.GoFish.GoFishStarter import GoFishStarter
+from Modules.Starters.GoFish.GoFish import GoFish
 from Modules.Players.Player import Player
 from Modules.Players.Bot import Bot
 
 
 class TestPlayerInit:
     def test_init_player_names(self):
-        starter = GoFishStarter()
+        starter = GoFish()
         test_accept = [Player("George"), Bot()]
 
         f1 = sys.stdin
         f = open("tests/test_data/single_player_name.txt", "r")
         sys.stdin = f
-        starter.initialize_go_fish()
+        starter.initialize()
         f.close()
         sys.stdin = f1
 

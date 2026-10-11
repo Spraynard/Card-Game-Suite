@@ -22,9 +22,9 @@ from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Players.Bot import Bot
 from Modules.Engines.GoFish.GoFishEngine import GoFishEngine
 from faker import Faker
+from .Starter import Starter
 
-
-class GoFishStarter:
+class GoFish(Starter):
     def __init__(self, test=False):
         self.players = []
         self.engine = GoFishEngine()
@@ -129,7 +129,7 @@ class GoFishStarter:
             else:
                 return input_bot_amount
 
-    def promptForPlayers(self) -> int:
+    def prompt_for_players(self) -> int:
         player_n = False
 
         while True:
@@ -156,21 +156,14 @@ class GoFishStarter:
                 break
         return player_n
 
-    def handle_player_init(self):
-        pass
-
-    def start_game(self):
-        self.engine.set_players(self.players)
-        self.engine.initialize()
-
-    def initialize_go_fish(self):
+    def initialize(self):
         if self.test:
             print("This is now in test mode")
             sleep(2)
         print("Welcome to another round of the famous game, Go Fish!")
         # Returns: Void
         try:
-            self.human_amount = self.promptForPlayers()
+            self.human_amount = self.prompt_for_players()
         except Exception as e:
             raise Exception(f"There is a problem in `handle_player_init()` - {e}")
 
@@ -184,4 +177,4 @@ class GoFishStarter:
 
 
 if __name__ == "__main__":
-    GoFishStarter().initialize_go_fish()
+    GoFish().initialize()
