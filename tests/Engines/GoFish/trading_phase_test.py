@@ -1,5 +1,4 @@
 import sys
-import unittest
 
 from Modules.Players.Bot import Bot
 from Modules.Players.HumanPlayer import HumanPlayer
@@ -39,7 +38,7 @@ def checkStringForBullshit(string):
 
 
 class TestTradingPhase:
-    def test_trading_phase_accept_single_card(self, human_player, bot_player, engine):
+    def test_trading_phase_accept_single_card(self, human_player: HumanPlayer, bot_player: Bot, engine: DebugGoFishEngine):
         # Steps:
         # 1. Player initialization
         # 	a. Set Chosen Player
@@ -50,10 +49,10 @@ class TestTradingPhase:
         # The ole 5 of clubs :)
 
         ask_card = Card(5, "Clubs")
-        human_player.setChosenPlayer(bot_player)
-        human_player.setChosenCard(ask_card)
+        human_player.set_chosen_player(bot_player)
+        human_player.set_chosen_card(ask_card)
         bot_player.hand.append(ask_card)
-        engine.tradingPhase(human_player)
+        engine.trading_phase(human_player)
 
         output = sys.stdout.getvalue().strip()
         split_output = output.split("\n")
@@ -61,43 +60,37 @@ class TestTradingPhase:
         output2 = split_output[1]
 
         acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
-            human_player.getName(),
+            human_player.get_name(),
             bot_player,
-            ask_card.getRank(),
+            ask_card.get_rank(),
         )
         assert output1 == acceptOutput1, (
             "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
-												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
+												Chosen Card: %s" % (human_player.get_name(), bot_player, ask_card.get_rank())
         )
 
         assert (
             checkStringForBullshit(output2) == False
         ), "You got some bullshit in your output 2"
         assert len(bot_player.getGiveArray()) == 0, (
-            "Bot Player's Give Array: %s" % bot_player.getGiveArray()
+            "Bot Player's Give Array: %s" % bot_player.get_give_array()
         )
-        assert len(bot_player.getHand()) == 0, (
-            "Bot Player's Hand %s" % bot_player.showHand()
-        )
+        
+        assert len(bot_player.getHand()) == 0
 
-        assert len(human_player.getHand()) != 0, (
-            "Human Player's hand %s" % human_player.showHand()
-        )
-
-    def test_trading_phase_accept_multiple_cards(
-        self, human_player, bot_player, engine
-    ):
+        assert len(human_player.getHand()) != 0
+    def test_trading_phase_accept_multiple_cards(self, human_player: HumanPlayer, bot_player: Bot, engine: DebugGoFishEngine):
         # The chosen player should have multiple of the `same` card.
         # 	I do not expect this to work right off the bat, but you know.
         ask_card = Card(5, "Hearts")
         bot_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
-        bot_player.takeRelevantCards(bot_card_array)
+        bot_player.take_relevant_cards(bot_card_array)
 
-        human_player.setChosenPlayer(bot_player)
-        human_player.setChosenCard(ask_card)
-        engine.tradingPhase(human_player)
+        human_player.set_chosen_player(bot_player)
+        human_player.set_chosen_card(ask_card)
+        engine.trading_phase(human_player)
 
         output = sys.stdout.getvalue().strip()
         split_output = output.split("\n")
@@ -105,43 +98,43 @@ class TestTradingPhase:
         output2 = split_output[1]
 
         acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
-            human_player.getName(),
+            human_player.get_name(),
             bot_player,
-            ask_card.getRank(),
+            ask_card.get_rank(),
         )
         assert output1 == acceptOutput1, (
             "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
-												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
+												Chosen Card: %s" % (human_player.get_name(), bot_player, ask_card.get_rank())
         )
 
-        assert len(bot_player.getGiveArray()) == 0, (
+        assert len(bot_player.get_give_array()) == 0, (
             "Bot Player's Give Array: %s" % bot_player.getGiveArray()
         )
-        assert bot_player.handCount() == 0, (
+        assert bot_player.hand_count() == 0, (
             "Bot Player's Hand %s" % bot_player.showHand()
         )
 
         assert (
-            human_player.handCount() != 0
+            human_player.hand_count() != 0
         ), "Human Player's hand is not empty, as it should be"
 
-    def test_trading_phase_reject_no_cards(self, human_player, bot_player, engine):
+    def test_trading_phase_reject_no_cards(self, human_player: HumanPlayer, bot_player: Bot, engine: DebugGoFishEngine):
         # Player should draw a card from the deck after this.
         # 	Don't forget to load up the engine with a deck.
-        engine.setDeck()
+        engine.set_deck()
 
         ask_card = Card(10, "Clubs")
         bot_hand_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
-        bot_player.takeRelevantCards(bot_hand_card_array)
+        bot_player.take_relevant_cards(bot_hand_card_array)
 
-        human_player.setChosenPlayer(bot_player)
-        human_player.setChosenCard(ask_card)
+        human_player.set_chosen_player(bot_player)
+        human_player.set_chosen_card(ask_card)
 
-        assert human_player.handCount() == 0
+        assert human_player.hand_count() == 0
 
-        engine.tradingPhase(human_player)
+        engine.trading_phase(human_player)
 
         output = sys.stdout.getvalue().strip()
         split_output = output.split("\n")
@@ -149,40 +142,40 @@ class TestTradingPhase:
         output2 = split_output[1]
 
         acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
-            human_player.getName(),
+            human_player.get_name(),
             bot_player,
-            ask_card.getRank(),
+            ask_card.get_rank(),
         )
         assert output1 == acceptOutput1, (
             "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
-												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
+												Chosen Card: %s" % (human_player.get_name(), bot_player, ask_card.get_rank())
         )
 
-        assert human_player.handCount() == 1
-        assert bot_player.handCount() == 3
+        assert human_player.hand_count() == 1
+        assert bot_player.hand_count() == 3
 
-    def test_trading_phase_reject_player_loss(self, human_player, bot_player, engine):
+    def test_trading_phase_reject_player_loss(self, human_player: HumanPlayer, bot_player: Bot, engine: DebugGoFishEngine):
 
         engine.deck = Deck()
-        engine.setPlayers([human_player, bot_player])
+        engine.set_players([human_player, bot_player])
 
-        assert human_player in engine.getPlayers()
+        assert human_player in engine.get_players()
 
         ask_card = Card(10, "Clubs")
 
         bot_hand_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
 
-        bot_player.takeRelevantCards(bot_hand_card_array)
+        bot_player.take_relevant_cards(bot_hand_card_array)
 
-        human_player.setChosenPlayer(bot_player)
+        human_player.set_chosen_player(bot_player)
 
-        human_player.setChosenCard(ask_card)
+        human_player.set_chosen_card(ask_card)
 
-        assert human_player.handCount() == 0
+        assert human_player.hand_count() == 0
 
-        engine.tradingPhase(human_player)
+        engine.trading_phase(human_player)
 
         output = sys.stdout.getvalue().strip()
         split_output = output.split("\n")
@@ -192,15 +185,15 @@ class TestTradingPhase:
         output3 = split_output[2]
 
         acceptOutput1 = '%s: "Hey %s, Do you have any %ss?"' % (
-            human_player.getName(),
+            human_player.get_name(),
             bot_player,
-            ask_card.getRank(),
+            ask_card.get_rank(),
         )
         assert output1 == acceptOutput1, (
             "Your output is not the same as what I am expecting\
 												\nPlayer: %s\n\
 												Chosen Player: %s\n\
-												Chosen Card: %s" % (human_player.getName(), bot_player, ask_card.getRank())
+												Chosen Card: %s" % (human_player.get_name(), bot_player, ask_card.get_rank())
         )
 
         acceptOutput3 = (
@@ -209,4 +202,4 @@ class TestTradingPhase:
         )
         assert output3 == acceptOutput3
 
-        assert not human_player in engine.getPlayers()
+        assert not human_player in engine.get_players()
