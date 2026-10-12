@@ -4,11 +4,11 @@
 from random import shuffle as shuffle
 from time import sleep as sleep
 
-from Modules.Starters.Starter import Starter
+from Modules.Engines.BlackjackEngine import BlackjackEngine
+from Modules.Starters.CardGame import CardGame
 
-class Blackjack(Starter):
+class Blackjack(CardGame):
     pass
 
-
 if __name__ == "__main__":
-    Blackjack().initialize()
+    Blackjack(BlackjackEngine()).initialize()
