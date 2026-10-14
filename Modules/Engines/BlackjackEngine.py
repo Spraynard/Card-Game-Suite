@@ -1,4 +1,5 @@
 from Modules.Engines.Engine import Engine
+from Modules.Players.Player import Player
 
 class BlackjackEngine(Engine):
     """
@@ -63,3 +64,5 @@ class BlackjackEngine(Engine):
 
 		The outcome of your insurance bet is separate from the outcome of your main hand.     
     """
+    def take_turn(self, player: Player) -> None:
+            return super().take_turn(player)
