@@ -1,4 +1,6 @@
 from Modules.Cards.Deck import Deck
+from Modules.Players.Actions.CardActions import CardActions
+from Modules.Players.Bot import Bot
 from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Players.Player import Player
 from Modules.Players.HumanPlayer import HumanPlayer
@@ -18,10 +20,7 @@ class Engine:
         # All Engines will have this obtaining and setting deck functionality
 
     def display_current_player_info(self, player: HumanPlayer):
-        # Give
         if isinstance(player, Bot):
-            # No need to display if
-            # 	the player is a bot
             return
         player.display_tricks()
         TerminalOutput.hand(player)
@@ -56,7 +55,7 @@ class Engine:
     def list_players_hands(self):
         players = self.get_players()
 
-        for p in players:
+        for player in players:
             print("%s: %s" % (p, player.getHand()))
             # End Player Handling Functionality
 
@@ -144,10 +143,10 @@ class Engine:
 
     def deal_hands(self):
         deck = self.get_deck()
-        players = self.get_players()
+        players: list[Player[CardActions]] = self.get_players()
 
-        for p in players:
-            p.draw_cards(deck, self.game_start_deal_number_of_cards())
+        for player in players:
+            player.actions.draw_cards(deck, self.game_start_deal_number_of_cards())
 
     def game_start_deal_number_of_cards(self):
         """Obtain the amount of cards each player should start with at the start of the game."""
