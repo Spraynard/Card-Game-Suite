@@ -1,6 +1,7 @@
 from Modules.Cards.Card import Card
 from Modules.Engines.Engine import Engine
 from Modules.Players import HumanPlayer
+from Modules.Players.Actions.GoFishActions import GoFishActions
 from Modules.Players.Bot import Bot
 from Modules.Players.Player import Player
 
@@ -56,7 +57,7 @@ class GoFishEngine(Engine):
                 print(f"{i + 1}: {choice_list[i]}")
             choice = self.player_ask_loop(len(choice_list))
 
-        player.set_chosen_player(choice_list[choice])
+        player.actionet_chosen_player(choice_list[choice])
 
     def choose_card(self, player):
         """
@@ -104,14 +105,14 @@ class GoFishEngine(Engine):
             # 		else:
             # 			break
 
-    def ask_for_card_rank(self, player: HumanPlayer) -> Card:
+    def ask_for_card_rank(self, player: HumanPlayer[GoFishActions]) -> Card:
         """
         Summary: Once the player chooses a card rank and another player to ask,
                        those values are stored in the player object and extracted in other code later on.
         Input: `player` - a player object, can be a humanplayer or a bot
         """
-        chosen_player = player.get_chosen_player()
-        chosen_card = player.get_chosen_card()
+        chosen_player = player.actions.go_fish.get_chosen_player()
+        chosen_card = player.actions.go_fish.get_chosen_card()
 
         player.talk("ask")
 
