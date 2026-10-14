@@ -75,7 +75,7 @@ class TestTradingPhase:
         # 	I do not expect this to work right off the bat, but you know.
         ask_card = Card(5, "Hearts")
         bot_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
-        bot_player.take_relevant_cards(bot_card_array)
+        bot_player.take_cards(bot_card_array)
 
         human_player.set_chosen_player(bot_player)
         human_player.set_chosen_card(ask_card)
@@ -112,7 +112,7 @@ class TestTradingPhase:
 
         ask_card = Card(10, "Clubs")
         bot_hand_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
-        bot_player.take_relevant_cards(bot_hand_card_array)
+        bot_player.take_cards(bot_hand_card_array)
 
         human_player.set_chosen_player(bot_player)
         human_player.set_chosen_card(ask_card)
@@ -152,7 +152,7 @@ class TestTradingPhase:
 
         bot_hand_card_array = [Card(5, "Clubs"), Card(5, "Spades"), Card(5, "Diamonds")]
 
-        bot_player.take_relevant_cards(bot_hand_card_array)
+        bot_player.take_cards(bot_hand_card_array)
 
         human_player.set_chosen_player(bot_player)
 

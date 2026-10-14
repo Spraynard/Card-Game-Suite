@@ -1,9 +1,13 @@
 from Modules.Cards.Card import Card
 from Modules.Engines.Engine import Engine
-from Modules.Players import HumanPlayer
-from Modules.Players.Actions.GoFishActions import GoFishActions
+from Modules.Players.Actions.ActionsGoFish import ActionsGoFish, GoFishBotActions
 from Modules.Players.Bot import Bot
-from Modules.Players.Player import Player
+from Modules.Players.BotGoFish import BotGoFish
+from Modules.Players.Player import Player, PlayerTalkReason
+import random
+
+from Modules.Players.PlayerGoFish import PlayerGoFish
+from Modules.Views.TerminalOutput import TerminalOutput
 
 """
 Right now the engine and the UI are mixed together.
@@ -36,30 +40,57 @@ class GoFishEngine(Engine):
             else:
                 break
         return choice
+    
+    def game_loop(self) -> None:
+        while not self.end_game:
+            player = self.get_current_player()
+            # Getting the current player for the turn
+            self.take_turn(player)
 
-    def choose_player_to_ask(self, player: Player):
+        self.congratulations(self.return_winning_player())
+
+    def congratulations(self, player:PlayerGoFish):
+        tricks = player.get_tricks()
+        print(f"Congratulations {player}, you have won the epic game of Go Fish with a trick count of {tricks}. Make sure to tell all of your other friends (if you have any) that you won one of the most childish games in all the land!")
+    
+    def return_winning_player(self):
+        player_list = self.get_players()
+        max_tricks = 0
+        max_player_array = None
+        for player in player_list:
+            player_score = player.get_tricks()
+            if max_tricks == player_score and (not player_score == 0):
+                max_player_array.append(player)
+            elif max_tricks < player_score:
+                max_tricks = player_score
+                max_player_array = []
+                max_player_array.append(player)
+        if len(max_player_array) == 1:
+            return max_player_array[0]
+        else:
+            return max_player_array
+
+    def choose_player_to_ask(self, player: PlayerGoFish):
         # Summary: Instructs the player to choose another player to ask for a card. This code also handles bots.
         # Input: `Player` - A player object
         # Returns: Void
-        choice_list = list(self.get_players())
+        choice_list: list[PlayerGoFish] = list(self.get_players())
         choice_list.remove(player)
-        choice = False
-
+        choice: PlayerGoFish
+        
         if isinstance(player, Bot):
-            import random
-
-            bot = player
-            bot.set_chosen_player(random.choice(choice_list))
+            choice = random.choice(choice_list)
         else:
             # Implement Player() player to ask
             print("Which player will you ask a card from?")
             for i in range(len(choice_list)):
                 print(f"{i + 1}: {choice_list[i]}")
-            choice = self.player_ask_loop(len(choice_list))
+            choice_index = self.player_ask_loop(len(choice_list))
+            choice = choice_list[choice_index]
 
-        player.actionet_chosen_player(choice_list[choice])
+        player.set_chosen_player(choice)
 
-    def choose_card(self, player):
+    def choose_card(self, player: PlayerGoFish):
         """
         Summary: Instructs players to choose a rank of card that they also have in their hand to eventually ask another player
         that is chosen.
@@ -70,72 +101,63 @@ class GoFishEngine(Engine):
               2a. If you have multiple ranks with the same amount, break by choosing randomly
               3. As for the selected rank from an opponent.
         """
-        if isinstance(player, Bot):
-            bot = player
-            bot.choose_card()
-        else:
-            rank = None
+        if isinstance(player, BotGoFish):
+            player.choose_card()
+            return
+        
+        rank = None
 
-            if not self.variant:
-                while True:
-                    rank = (
-                        input("What card rank do you want to ask for (e.g. 2 - Ace)?: ")
-                        .lower()
-                        .title()
+        if not self.variant:
+            while True:
+                rank = (
+                    input("What card rank do you want to ask for (e.g. 2 - Ace)?: ")
+                    .lower()
+                    .title()
+                )
+                flagCard = Card(rank)
+                if not flagCard.acceptable_rank():
+                    print(
+                        "\nError: That is not an acceptable card rank. Please choose again."
                     )
-                    flagCard = Card(rank)
-                    if not flagCard.acceptableRank():
-                        print(
-                            "\nError: That is not an acceptable card rank. Please choose again."
-                        )
-                    elif not player.hasCard(flagCard):
-                        print(
-                            "\nError: You don't even have any of those cards in your hand! Try again."
-                        )
-                    else:
-                        player.setChosenCard(Card(rank))
-                        break
-            # This code is for when I implement any variants within the game. Do not pay attention to now.
-            # if self.variant == 1:
-            # 	suit = None
-            # 	while True:
-            # 		suit = str(input("What card suit do you want to ask for (e.g. 'Clubs', 'Spades')?: ")).lower().title()
-            # 		if not suit in correctInputDict['suits']:
-            # 			print("That is not an acceptable card suit. Please choose again")
-            # 		else:
-            # 			break
+                elif not player.has_card(flagCard):
+                    print(
+                        "\nError: You don't even have any of those cards in your hand! Try again."
+                    )
+                else:
+                    player.set_chosen_card(Card(rank))
+                    break
 
-    def ask_for_card_rank(self, player: HumanPlayer[GoFishActions]) -> Card:
+    def ask_for_card_rank(self, player: PlayerGoFish) -> Card:
         """
         Summary: Once the player chooses a card rank and another player to ask,
                        those values are stored in the player object and extracted in other code later on.
-        Input: `player` - a player object, can be a humanplayer or a bot
+        Input: `player` - a player object, can be a Player or a bot
         """
-        chosen_player = player.actions.go_fish.get_chosen_player()
-        chosen_card = player.actions.go_fish.get_chosen_card()
+        chosen_player = player.get_chosen_player()
+        chosen_card = player.get_chosen_card()
 
-        player.talk("ask")
+        player.talk(player, PlayerTalkReason.ASK)
 
         if chosen_player.has_card(chosen_card):
             # Count how many cards there are of that cardRank in the player's hand
             # 	give feedback based on the amount of cards.
             player.guessed_correctly()
             chosen_player.concede_defeat(chosen_card)
+
             if isinstance(chosen_player, Bot):
-                bot = chosen_player
-                bot.talk("exclaim")
+                print(chosen_player.talk(chosen_player, PlayerTalkReason.EXCLAIM))
             else:
-                chosen_player.talk("defeat")
+                print(chosen_player.talk(chosen_player, PlayerTalkReason.DEFEAT))
 
             chosen_player.give_to_player(player)
         else:
             if isinstance(chosen_player, Bot):
                 # If the other player is a bot, they will taunt you
                 # 	and probably make you really sad af.
-                bot = chosen_player
-                print(bot.taunt_player())
+                bot: Bot[GoFishBotActions] = chosen_player
+                print(bot.actions.taunt_player(chosen_player.name))
             else:
-                chosen_player.talk("victory")
+                print(chosen_player.talk(chosen_player, PlayerTalkReason.VICTORY))
 
         return chosen_card
 
@@ -143,6 +165,12 @@ class GoFishEngine(Engine):
     def game_start_deal_number_of_cards(self):
         # Three Players or more
         return 5 if len(self.players) > 3 else 7
+
+    def display_current_player_info(self, player: PlayerGoFish):
+        if isinstance(player, Bot):
+            return
+        player.display_tricks()
+        TerminalOutput.hand(player)
 
     # Game Phases Here
     def initial_phase(self, player):
@@ -152,13 +180,15 @@ class GoFishEngine(Engine):
         self.choose_player_to_ask(player)
         self.choose_card(player)
 
-    def trading_phase(self, player: Player):
+    def trading_phase(self, player: PlayerGoFish):
         chosen_card = self.ask_for_card_rank(player)
+
+
         # Player state is valuable after they ask for card.
         deck = self.get_deck()
 
         if not player.got_guess():
-            if (player.hand_count() == 0) and (deck.current_amount() == 0):
+            if (len(player.get_hand()) == 0) and (deck.current_amount() == 0):
                 print(
                     "Hey everyone, laugh at %s! They got kicked out of the game for losing!"
                     % player
@@ -175,7 +205,7 @@ class GoFishEngine(Engine):
     def win_conditions_met(self):
         return self.get_master_trick_count() == 13
 
-    def end_phase(self, player: Player):
+    def end_phase(self, player: PlayerGoFish):
         player.sort_hand()
         player.look_for_tricks()
         tricks_added = player.set_tricks()
@@ -187,7 +217,7 @@ class GoFishEngine(Engine):
 
             # Resetting the player's guess for next turn :)
             player.reset_guess()
-            self.take_turn()
+            self.take_turn(player)
         else:
             # If the player had to draw from the pile because they guessed badly.
             self.add_player_index()
@@ -195,7 +225,7 @@ class GoFishEngine(Engine):
         if self.win_conditions_met():
             self.end_game = True
 
-    def take_turn(self, player: Player):
+    def take_turn(self, player: PlayerGoFish):
         # Turn consists of:
         # 	INITIAL PHASE
         # 	- Displaying player's hand and amount of tricks (if any)

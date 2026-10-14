@@ -1,9 +1,7 @@
 from Modules.Cards.Deck import Deck
-from Modules.Players.Actions.CardActions import CardActions
+from Modules.Players.Actions.ActionsCard import ActionsCard
 from Modules.Players.Bot import Bot
-from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Players.Player import Player
-from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Views.TerminalOutput import TerminalOutput
 
 class Engine:
@@ -19,11 +17,8 @@ class Engine:
 
         # All Engines will have this obtaining and setting deck functionality
 
-    def display_current_player_info(self, player: HumanPlayer):
-        if isinstance(player, Bot):
-            return
-        player.display_tricks()
-        TerminalOutput.hand(player)
+    def display_current_player_info(self, player: Player):
+        raise Exception("Not Implemented -- display_current_player_info")
 
     def get_deck(self) -> Deck:
         # Summary: Gives the deck object out.
@@ -39,7 +34,7 @@ class Engine:
 
         # All Engines will handle getting and setting current players with this functionality
 
-    def get_players(self) -> list[Player]:
+    def get_players(self) -> list[Player[ActionsCard]]:
         return self.players
 
     def get_player_amount(self) -> int:
@@ -56,7 +51,7 @@ class Engine:
         players = self.get_players()
 
         for player in players:
-            print("%s: %s" % (p, player.getHand()))
+            print("%s: %s" % (player, player.getHand()))
             # End Player Handling Functionality
 
     def _get_player_index(self):
@@ -108,45 +103,15 @@ class Engine:
         This is the main game loop. Every run tests if the game 
         is 'over'
         """
-        while not self.end_game:
-            player = self.get_current_player()
-            # Getting the current player for the turn
-            self.take_turn(player)
-
-        self.congratulations(self.return_winning_player())
-
-    def congratulations(self, player_obj):
-
-        winning_players = ""
-        winning_trick_amount = None
-
-        if isinstance(player_obj, HumanPlayer):
-            winning_players = player_obj
-            winning_trick_amount = player_obj.get_tricks()
-        elif type(player_obj) == list:
-            player_amt = len(player_obj)
-            for i in range(player_obj):
-                if i == (player_obj - 1):
-                    winning_players += player_obj[i]
-                    winning_trick_amount = player_obj[i].get_tricks()
-                else:
-                    winning_players += player_obj[i] + ", "
-        else:
-            raise Exception(
-                "What the hell are you putting in here, man? That ain't cool."
-            )
-
-        print(
-            """Congratulations %s, you have won the epic game of Go Fish with a trick count of %s. Make sure to tell all of your other friends (if you have any) that you won one of the most childish games in all the land!"""
-            % (winning_players, winning_trick_amount)
-        )
+        raise Exception("Not Implemented -- game_loop")
 
     def deal_hands(self):
         deck = self.get_deck()
-        players: list[Player[CardActions]] = self.get_players()
+        players: list[Player[ActionsCard]] = self.get_players()
 
         for player in players:
-            player.actions.draw_cards(deck, self.game_start_deal_number_of_cards())
+            print(player)
+            player.draw_cards(deck, self.game_start_deal_number_of_cards())
 
     def game_start_deal_number_of_cards(self):
         """Obtain the amount of cards each player should start with at the start of the game."""

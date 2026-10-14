@@ -1,10 +1,10 @@
+from typing import Self
 from Modules.Cards.Card import Card
 from Modules.Cards.Deck import Deck
+from Modules.Players import Player
 
-
-class CardActions:
-    def __init__(self) -> None:
-        self.hand = []
+class ActionsCard:
+    hand: list[Card] = []
     
     def get_hand(self):
         return self.hand
@@ -42,14 +42,35 @@ class CardActions:
     def take_card(self, card) -> None:
         self.hand.append(card)
 
-    def take_relevant_cards(self, card_array) -> None:
-        for c in card_array:
-            self.take_card(c)
-
-            # |--------End Drawing or Taking Cards Functionality-----|
+    def take_cards(self, cards: list[Card]) -> None:
+        for card in cards:
+            self.take_card(card)
 
     def reset_hand(self) -> None:
         self.hand = []
+
+    def get_sorting_dict(self):
+        return self.sorting_dict
+
+    def reset_sorting_dict(self):
+        self.sorting_dict = {}
+        
+    def populate_sorting_dict(self):
+        sorting_dict = self.get_sorting_dict()
+        if self.hand_count() == 0:
+            return
+        for card in self.get_hand():
+            card_rank = card.get_rank()
+            if not card_rank in sorting_dict:
+                sorting_dict[card_rank] = []
+            sorting_dict[card_rank].append(card)
+
+    def format_cards_by_sorting_dict(self):
+        s_d = self.get_sorting_dict()
+        hand_holder = []
+        for g in s_d.values():
+            hand_holder += g
+        self.set_hand(hand_holder)
 
     def sort_hand(self):
         # Go through the hand. Will group similar cards within
@@ -62,19 +83,19 @@ class CardActions:
 
         # Code for player specific TRADING PHASE operations
 
-    def has_card(self, flag_card):
+    def has_card(self, card: Card):
         """
         Checks to see if player has a card in their 
         hand
         """
         hand = self.get_hand()
-        flag_card_rank = flag_card.get_rank()
+        flag_card_rank = card.get_rank()
         rank_hand = []
         for c in hand:
             rank_hand.append(c.get_rank())
         return flag_card_rank in rank_hand
 
-    def remove_card(self, card):
+    def remove_card(self, card: Card):
         self.hand.remove(card)
 
     def remove_relevant_cards(self):

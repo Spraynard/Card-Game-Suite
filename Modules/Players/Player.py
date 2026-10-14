@@ -1,28 +1,32 @@
+from enum import Enum
+from typing import Self
 import uuid
 
 from faker import Faker
-from typing import Generic, TypeVar, Optional
 
-from Modules.Players.Actions.CardActions import CardActions
+from Modules.Players.Actions.ActionsCard import ActionsCard
 
+class PlayerTalkReason(Enum):
+    VICTORY = "victory"
+    DEFEAT  = "defeat"
+    EXCLAIM = "exclaim"
+    ASK     = "ask"
 
-ActionsT = TypeVar("ActionsT", bound="CardActions")
-
-class Player(Generic[ActionsT]):
+# from card_game_suite_types import ActionsT
+class Player(ActionsCard):
     ################
     # INITIALIZATION
     ################
     name = ""
-    actions: Optional[ActionsT]
-    def __init__(self, name=None, actions: Optional[ActionsT] = None):
+    def __init__(self, name: str):
         self.name = name
         # Internal Player's ID
         self.id = uuid.uuid4()
-        self.actions = actions
+
 
         # Defines equality from one player to the other based on the internal ID that they have.
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return self.id == other.id
 
     def __repr__(self):
@@ -34,27 +38,11 @@ class Player(Generic[ActionsT]):
         else:
             return "Player"
 
-    def random_name(self):
+    def random_name(self) -> Self:
         # Returns a `Player` with a random name from the Faker lib
         # 	can get some pretty funny names :)
         fake = Faker()
-        return Player(fake.name())
+        return self(fake.name)
 
     def get_name(self):
         return self.name
-
-        #######################################
-        # Player Printed Statements ( Talking )
-        # 	These statements are required by every player class that will
-        # 	be a child of this class (which should be all of em). Game specific printed statements
-        # 	shall be implemented in the respective player class
-        #######################################
-
-    def victory_statement(self):
-        raise NotImplementedError("Victory Statement")
-
-    def defeat_statement(self):
-        raise NotImplementedError("Defeat Statement")
-
-    def talk(self, reason):
-        raise NotImplementedError("Talk")

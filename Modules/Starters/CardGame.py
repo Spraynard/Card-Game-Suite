@@ -1,11 +1,10 @@
 from random import shuffle
-from time import sleep
 
 from faker import Faker
 
-from Modules.Players.Actions.CardActions import CardActions
+from Modules.Players.Actions.ActionsCard import ActionsCard
 from Modules.Players.Bot import Bot
-from Modules.Players.HumanPlayer import HumanPlayer
+from Modules.Players.Player import Player
 from Modules.Starters.Starter import Starter
 
 class CardGame(Starter):
@@ -105,10 +104,14 @@ class CardGame(Starter):
                 break
         return player_n
     
-    def generate_human_players(self, amount) -> list[HumanPlayer[CardActions]]:
-        return [ HumanPlayer( actions=CardActions() ) for i in range(amount) ]
+    def player_actions(self) -> ActionsCard:
+        raise Exception("Not Implemented -- player_actions()")
+    
+    def bot_actions(self) -> ActionsCard:
+        raise Exception("Not Implemented -- bot_actions()")
 
     def add_all_players(self, human_amount, bot_amount):
+        faker = Faker()
         player_bucket = []
         player_names = self.get_players_names_prompt(human_amount)
 
@@ -116,11 +119,12 @@ class CardGame(Starter):
             name = None
             if player_names:
                 name = player_names[i]
-
-        player_bucket.append(HumanPlayer(name,))
+            else:
+                name = faker.name()
+            player = Player(name, self.player_actions())
+            player_bucket.append(player)
         for i in range(bot_amount):
-            fake = Faker()
-            bot = Bot(fake.name())
+            bot = Bot(faker.name(), self.bot_actions())
             player_bucket.append(bot)
 
         shuffle(player_bucket)
