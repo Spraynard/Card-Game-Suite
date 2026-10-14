@@ -8,7 +8,9 @@ from Modules.Engines.BlackjackEngine import BlackjackEngine
 from Modules.Starters.CardGame import CardGame
 
 class Blackjack(CardGame):
-    pass
+    def initialize(self):
+        print("You are going to play a game of Blackjack")
+        return super().initialize()
 
 if __name__ == "__main__":
     Blackjack(BlackjackEngine()).initialize()
