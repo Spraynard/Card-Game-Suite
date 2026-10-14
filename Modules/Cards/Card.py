@@ -1,3 +1,6 @@
+from typing import Self
+
+
 def card_rank_to_num(rank, variant=None):
     if not variant:
         if rank == "Ace":
@@ -57,12 +60,12 @@ class Card(object):
             ],
         }
 
-    def __eq__(self, other):
+    def __eq__(self, other: Self):
         if not self or not other:
             return None
         return (self.rank == other.rank) and (self.suit == other.suit)
 
-    def is_same_rank(self, other):
+    def is_same_rank(self, other: Self):
         return self.rank == other.rank
 
     def __lt__(self, other):
@@ -70,7 +73,7 @@ class Card(object):
         c2 = card_suit_rank(other.suit), card_rank_to_num(other.rank)
         return c1 < c2
 
-    def __gt__(self, other):
+    def __gt__(self, other: Self):
         c1 = card_suit_rank(self.suit), card_rank_to_num(self.rank)
         c2 = card_suit_rank(other.suit), card_rank_to_num(other.rank)
         return c1 > c2
