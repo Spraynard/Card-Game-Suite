@@ -3,6 +3,7 @@ from time import sleep
 
 from faker import Faker
 
+from Modules.Players.Actions.CardActions import CardActions
 from Modules.Players.Bot import Bot
 from Modules.Players.HumanPlayer import HumanPlayer
 from Modules.Starters.Starter import Starter
@@ -104,16 +105,19 @@ class CardGame(Starter):
                 break
         return player_n
     
+    def generate_human_players(self, amount) -> list[HumanPlayer[CardActions]]:
+        return [ HumanPlayer( actions=CardActions() ) for i in range(amount) ]
+
     def add_all_players(self, human_amount, bot_amount):
         player_bucket = []
         player_names = self.get_players_names_prompt(human_amount)
 
         for i in range(human_amount):
+            name = None
             if player_names:
-                player_bucket.append(HumanPlayer(player_names[i]))
-            else:
-                player_bucket.append(HumanPlayer())
+                name = player_names[i]
 
+        player_bucket.append(HumanPlayer(name,))
         for i in range(bot_amount):
             fake = Faker()
             bot = Bot(fake.name())
