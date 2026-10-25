@@ -1,40 +1,27 @@
 from Modules.Cards.Deck import Deck
 from Modules.Players.Actions.ActionsCard import ActionsCard
 from Modules.Players.Bot import Bot
-from Modules.Players.Player import Player
+from Modules.Players.Dealer import Dealer
+from Modules.Players.Player import Player, Players
 from Modules.Views.TerminalOutput import TerminalOutput
 
 class Engine:
-    # Controls the start, turn, and checks of the actual game.
-    def __init__(self, test=False):
-        self.players = None
-        self.deck = None
-        # Index of the current player
-        self.player_index = 0
-        self.variant = None
-        self.test = test
-        self.end_game = False
+    dealer = Dealer()
+    deck = Deck()
+    end_game: bool = False
+    players: Players = []
+    player_index: int = 0
 
-        # All Engines will have this obtaining and setting deck functionality
+    def __init__(self):
+        self.deck.shuffle()
+
+    def card_deal_amount(self):
+        raise Exception("card_deal_amount not implemented")
 
     def display_current_player_info(self, player: Player):
         raise Exception("Not Implemented -- display_current_player_info")
 
-    def get_deck(self) -> Deck:
-        # Summary: Gives the deck object out.
-        # Returns: `self.deck` - Deck Object
-        return self.deck
-
-    def set_deck(self):
-        # Summary: Sets
-        # Input: `new_deck` - The new value of the deck object I want to set to
-        # Returns: Void
-        self.deck = Deck()
-        self.get_deck().initialize()
-
-        # All Engines will handle getting and setting current players with this functionality
-
-    def get_players(self) -> list[Player[ActionsCard]]:
+    def get_players(self) -> Players:
         return self.players
 
     def get_player_amount(self) -> int:
@@ -54,20 +41,19 @@ class Engine:
             print("%s: %s" % (player, player.getHand()))
             # End Player Handling Functionality
 
-    def _get_player_index(self):
-        return self.player_index
-
     def add_player_index(self):
         players = self.get_players()
 
-        if (self._get_player_index() + 1) == len(players):
+        if (self.player_index() + 1) == len(players):
             self.player_index = 0
         else:
             self.player_index += 1
 
     def get_current_player(self):
+        player_index = self.player_index
+        players = self.players
         try:
-            return self.get_players()[self._get_player_index()]
+            return players[player_index]
         except IndexError:
             print("Error: List Index Out of Range")
 
@@ -105,25 +91,18 @@ class Engine:
         """
         raise Exception("Not Implemented -- game_loop")
 
-    def deal_hands(self):
-        deck = self.get_deck()
-        players: list[Player[ActionsCard]] = self.get_players()
-
+    def deal_hands(self, players: Players, deck: Deck, amount: int):
+        """
+        Makes the dealer deal the hands.
+        The dealer might be part of the game, but they also might not be
+        """
         for player in players:
-            print(player)
-            player.draw_cards(deck, self.game_start_deal_number_of_cards())
+            self.dealer.deal(player, deck, amount)
 
-    def game_start_deal_number_of_cards(self):
-        """Obtain the amount of cards each player should start with at the start of the game."""
-        raise Exception("game_start_deal_number_of_cards not implemented")
-
-    def game_start(self) -> None:
+    def start(self, players: Players) -> None:
         """
-        Start the game
+        Start the game with given players
         """
-        self.deal_hands()
+        self.players = players
+        self.deal_hands(self.players, self.deck, self.card_deal_amount())
         return self.game_loop()
-
-    def initialize(self):
-        self.set_deck()
-        self.game_start()

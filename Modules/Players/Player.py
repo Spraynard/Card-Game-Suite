@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Self
+from typing import Self, List
 import uuid
 
 from faker import Faker
@@ -18,8 +18,7 @@ class Player(ActionsCard):
     # INITIALIZATION
     ################
     name = ""
-    def __init__(self, name: str):
-        self.name = name
+    def __init__(self):
         # Internal Player's ID
         self.id = uuid.uuid4()
 
@@ -46,3 +45,5 @@ class Player(ActionsCard):
 
     def get_name(self):
         return self.name
+
+Players = List[Player]

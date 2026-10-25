@@ -11,7 +11,7 @@ class ActionsGoFish(ActionsCard):
     chosen_card = None
 
     # Array used to give cards to other players
-    give_array: list[Card] = []
+    give_array: Cards = []
     sorting_dict = {}
     trick_holder = []
 

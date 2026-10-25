@@ -2,26 +2,14 @@ from random import shuffle
 
 from faker import Faker
 
-from Modules.Players.Actions.ActionsCard import ActionsCard
-from Modules.Players.Bot import Bot
-from Modules.Players.Player import Player
+from Modules.Players.Player import Player, Players
 from Modules.Starters.Starter import Starter
 
 class CardGame(Starter):
     """
     Kind of like a mixin class for all card games
     that's helpful to pass around.
-    """
-    players = []
-    min_bots = 0
-    max_players = 0
-    min_players = 0
-    min_bots = 0
-    human_amount = 0
-    bot_amount = 0
-    max_human_players = 0
-    human_players = False
-    
+    """    
     def initialize(self):
         try:
             self.human_amount = self.prompt_for_players()
@@ -33,7 +21,7 @@ class CardGame(Starter):
         except:
             raise Exception(f"There was an error initializing the bots - {e}")
 
-        self.add_all_players(self.human_amount, self.bot_amount)
+        self.players = self.create_players(self.human_amount, self.bot_amount)
         self.start_game()
     
     def prompt_for_bots(self):
@@ -103,17 +91,17 @@ class CardGame(Starter):
                 self.human_players = True
                 break
         return player_n
-    
-    def player_actions(self) -> ActionsCard:
-        raise Exception("Not Implemented -- player_actions()")
-    
-    def bot_actions(self) -> ActionsCard:
-        raise Exception("Not Implemented -- bot_actions()")
 
-    def add_all_players(self, human_amount, bot_amount):
+    def create_player(self) -> Player:
+        raise Exception("Not Implemented -- create_player()")
+    
+    def create_bot(self) -> Player:
+        raise Exception("Not Implemented -- create_bot()")
+    
+    def create_players(self, human_amount: int, bot_amount: int):
         faker = Faker()
-        player_bucket = []
         player_names = self.get_players_names_prompt(human_amount)
+        players: Players = []
 
         for i in range(human_amount):
             name = None
@@ -121,16 +109,16 @@ class CardGame(Starter):
                 name = player_names[i]
             else:
                 name = faker.name()
-            player = Player(name, self.player_actions())
-            player_bucket.append(player)
+            player = self.create_player()
+            player.name = name
+            players.append(player)
+
         for i in range(bot_amount):
-            bot = Bot(faker.name(), self.bot_actions())
-            player_bucket.append(bot)
+            bot = self.create_bot()
+            bot.name = faker.name()
+            players.append(bot)
 
-        shuffle(player_bucket)
-
-        for player in player_bucket:
-            self.players.append(player)
+        return players
     
     def get_players_names_prompt(self, player_n) -> int:
         names = False

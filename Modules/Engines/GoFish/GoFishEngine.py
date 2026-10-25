@@ -162,7 +162,7 @@ class GoFishEngine(Engine):
         return chosen_card
 
     # End Game Action Functionality
-    def game_start_deal_number_of_cards(self):
+    def card_deal_amount(self):
         # Three Players or more
         return 5 if len(self.players) > 3 else 7
 

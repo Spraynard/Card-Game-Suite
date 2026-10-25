@@ -1,6 +1,16 @@
 from Modules.Engines.Engine import Engine
 
 class Starter:
+    players = []
+    min_bots = 0
+    max_players = 0
+    min_players = 0
+    min_bots = 0
+    human_amount = 0
+    bot_amount = 0
+    max_human_players = 0
+    human_players = False
+
     """
     Starters perform all of the operations for getting all information
     needed before we can start a game
@@ -18,8 +28,7 @@ class Starter:
         raise Exception("Not Implemented -- Starter.initialize")
     
     def start_game(self) -> None:
-        self.engine.set_players(self.players)
-        self.engine.initialize()
+        self.engine.start(self.players)
 
     def handle_player_init(self):
         pass

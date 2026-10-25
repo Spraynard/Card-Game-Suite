@@ -1,15 +1,13 @@
-from typing import Self
-from Modules.Cards.Card import Card
+from Modules.Cards.Card import Card, Cards
 from Modules.Cards.Deck import Deck
-from Modules.Players import Player
 
 class ActionsCard:
-    hand: list[Card] = []
+    hand: Cards = []
     
     def get_hand(self):
         return self.hand
 
-    def set_hand(self, hand):
+    def set_hand(self, hand: Cards):
         self.hand = hand
 
     def has_hand(self):
@@ -26,7 +24,7 @@ class ActionsCard:
         # Summary: Draws a single card from the deck and then adds it to the player's hand
         # Input: `Deck` - The deck being used by the players.
         # Return: Void if everything goes alright. False if shit is messed up
-        card = deck.card_from_top()
+        card = deck.draw()
 
         if card:
             self.take_card(card)
@@ -39,10 +37,10 @@ class ActionsCard:
             cards.append(self.draw_card(deck))
         return cards
 
-    def take_card(self, card) -> None:
+    def take_card(self, card: Card) -> None:
         self.hand.append(card)
 
-    def take_cards(self, cards: list[Card]) -> None:
+    def take_cards(self, cards: Cards) -> None:
         for card in cards:
             self.take_card(card)
 
